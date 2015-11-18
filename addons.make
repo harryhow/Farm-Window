@@ -1,0 +1,8 @@
+ofxAVFoundationVideoPlayer
+ofxRemoteUI
+ofxOsc
+ofxXmlSettings
+ofxAVFVideoPlayer
+ofxFontStash
+ofxUnicode
+ofxGiantImage
