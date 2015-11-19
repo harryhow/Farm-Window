@@ -6,6 +6,11 @@
 #include "ofxFontStash.h"
 #include "ofxGiantImage.h"
 #include "ofURLFileLoader.h"
+#include "ofxOsc.h"
+
+#define     HOST "192.168.0.255" // broadcast ip
+#define     SENDPORT 6002
+#define     RECVPORT 6002
 
 
 class ofApp : public ofBaseApp{
@@ -29,6 +34,7 @@ class ofApp : public ofBaseApp{
 		void windowResized(int w, int h);
 		void dragEvent(ofDragInfo dragInfo);
 		void gotMessage(ofMessage msg);
+        void loadVideo(string filename);
     
         std::vector<ofxAVFVideoPlayer *> videoPlayers;
     
@@ -73,8 +79,21 @@ class ofApp : public ofBaseApp{
         float initTime;
         float initTimeDbg;
     
+        // osc values
+        int    isCellStart;
+        int    isCellStop;
+        string mediaType;
+        int    cellKickTime;
     
         // member function
         void urlResponse(ofHttpResponse & response);
         void exit();
+    
+        void dumpOSC(ofxOscMessage m);
+        
+        ofxOscSender oscSender;
+        ofxOscReceiver oscReceiver;
+        
+        ofxOscMessage msgSend;
+        ofxOscMessage msgRecv;
 };

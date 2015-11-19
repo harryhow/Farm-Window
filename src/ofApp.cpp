@@ -15,6 +15,30 @@ int loopCounter = 0;
 static const int N_VIDEO_PLAYERS = 2;
 string ASSEST_VIDOE_FOLDER = "movies/A/";
 
+int frameJump;
+
+void ofApp::loadVideo(string filename){
+
+    ofDirectory dir;
+    dir.open(ASSEST_VIDOE_FOLDER);
+    //int numFiles = dir.listDir();
+    string path = dir.path() + filename;
+    videoPlayers[i]->loadMovie(path);
+
+    
+//    ofDirectory dir;
+//    dir.open(ASSEST_VIDOE_FOLDER);
+//    int numFiles = dir.listDir();
+//
+//    for (int i = 0; i < numFiles; ++i)
+//    {
+//        cout << "Path at index [" << i << "] = " << dir.getPath(i) << endl;
+//        videoPlayers.push_back(new ofxAVFVideoPlayer());
+//        videoPlayers[i]->loadMovie(dir.getPath(i));
+//        videoPlayers[i]->setLoopState(OF_LOOP_NORMAL);
+//        videoPlayers[i]->play();
+//    }
+}
 
 //--------------------------------------------------------------
 void ofApp::setup(){
@@ -182,6 +206,15 @@ void ofApp::setup(){
     initTimeDbg = ofGetElapsedTimef();
     ofRegisterURLNotification(this);
     
+    // osc
+    oscSender.setup(HOST, SENDPORT);
+    oscReceiver.setup(RECVPORT);
+    
+    // send ready
+    msgSend.setAddress("/sync/start/FW_SH_02_HBD_A");
+    msgSend.addStringArg("ready");
+    oscSender.sendMessage(msgSend);
+
 }
 
 
@@ -217,6 +250,39 @@ void ofApp::update(){
 
 //--------------------------------------------------------------
 void ofApp::draw(){
+    
+    int frameDiff;
+    
+    while (oscReceiver.hasWaitingMessages()) {
+        cout << "New msg is coming + ";
+        ofxOscMessage m;
+        oscReceiver.getNextMessage(&m);
+        
+        if (m.getAddress() == "/sync/play/FW_SH_02_HBD_A/frameJump") {
+            frameJump = m.getArgAsInt32(0);
+            cout << "Frame sync, jump(" << frameJump << ") frames\r\n";
+            
+            // do move forward
+            videoPlayers[i]->setFrame(frameJump);
+        }
+        else if (m.getAddress() == "/sync/play/nowPlayingFile") {
+            // can I get all the file list from the beginning?
+            loadVideo(m.getArgAsString(0));
+        }
+        else if (m.getAddress() == "/sync/play/nowPlayingStart") {
+            isCellStart = m.getArgAsInt32(0);
+        }
+        else if (m.getAddress() == "/sync/play/nowPlayingStop") {
+            isCellStop = m.getArgAsInt32(0);
+        }
+        else if (m.getAddress() == "/sync/play/type") {
+            mediaType = m.getArgAsString(0);
+        }
+        else if (m.getAddress() == "/sync/play/nowPlayingKickTime") {
+            cellKickTime = m.getArgAsInt32(0);
+        }
+        //dumpOSC(m);
+    }
     
     strFruitString =  strFruitPrefix + ofToString(currentAppleAmount) + strUnit;
     
@@ -392,6 +458,13 @@ void ofApp::draw(){
 
     ofDrawBitmapString("Total Loop #" + ofToString(loopCounter) + " \nClip #" + ofToString(i), 20, 460);
     
+    // send out frame number information
+    msgSend.setAddress("/sync/play/FW_SH_02_HBD_A/currentFrame");
+    msgSend.addIntArg(videoPlayers[i]->getCurrentFrame());
+    oscSender.sendMessage(msgSend);
+    
+    
+    
 #if 0
 #if 0
     ofPushMatrix();
@@ -506,6 +579,24 @@ void ofApp::keyPressed(int key){
     }
 }
 
+void ofApp::dumpOSC(ofxOscMessage m) {
+    
+    string msg_string;
+    
+    msg_string = m.getAddress();
+    
+    for (int i=0; i<m.getNumArgs(); i++ ) {
+        msg_string += " ";
+        if(m.getArgType(i) == OFXOSC_TYPE_INT32)
+            msg_string += ofToString( m.getArgAsInt32(i));
+        else if(m.getArgType(i) == OFXOSC_TYPE_FLOAT)
+            msg_string += ofToString( m.getArgAsFloat(i));
+        else if(m.getArgType(i) == OFXOSC_TYPE_STRING)
+            msg_string += m.getArgAsString(i);
+    }
+    cout << msg_string << endl;
+}
+
 //--------------------------------------------------------------
 void ofApp::keyReleased(int key){
 
@@ -513,6 +604,20 @@ void ofApp::keyReleased(int key){
 
 //--------------------------------------------------------------
 void ofApp::mouseMoved(int x, int y ){
+    
+//    currentFrameA = x;
+//    currentFrameB = y;
+//    
+//    ofxOscMessage msgfromA;
+//    ofxOscMessage msgfromB;
+//    msgfromA.setAddress("/sync/A/currentFrame");
+//    msgfromB.setAddress("/sync/B/currentFrame");
+//    
+//    msgfromA.addIntArg(currentFrameA);
+//    msgfromB.addIntArg(currentFrameB);
+//    
+//    oscSender.sendMessage(msgfromA);
+//    oscSender.sendMessage(msgfromB);
 
 }
 
