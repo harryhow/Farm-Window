@@ -50,7 +50,7 @@ class ofApp : public ofBaseApp{
     
         std::vector<ofxAVFVideoPlayer *> videoPlayers;
     
-        int prevTimePeriod;
+        int prevTimePeriod; 
     
         int fps;
         // remote UI
@@ -125,6 +125,7 @@ class ofApp : public ofBaseApp{
         int countOne, countTwo, countThree;
         int logoX, logoY, percentageX;
         bool isShowPercentage;
+        string oscIP;
     
     
         // member function

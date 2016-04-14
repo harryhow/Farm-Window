@@ -95,6 +95,7 @@ void ofApp::InitRemoteControlUI() {
     
     RUI_NEW_GROUP("Maintenance Option");	//make a new group (optional)
     RUI_SHARE_PARAM(logoY, 0, ofGetHeight());
+    RUI_SHARE_PARAM(oscIP);
     
     
     // SHARE A string PARAM to unload it later;
@@ -173,6 +174,7 @@ void ofApp::setup(){
     hybridPosterCount = 0;
     prevHybridSeq = -1;
     isShowPercentage = true;
+    oscIP = "";
     
     // remote controller
     InitRemoteControlUI();
@@ -243,8 +245,16 @@ void ofApp::setup(){
     ofRegisterURLNotification(this);
     
  
-    // osc
-    oscSender.setup(HOST, SENDPORT);
+    // OSC
+    // TODO: need more tests on this
+    oscIP = "\"" + oscIP + "\"";
+    if (oscIP.length() > 7) {
+        oscSender.setup(oscIP, SENDPORT);
+        cout << "oscIP:" << oscIP << "\r\n";
+    }
+    else
+        oscSender.setup(HOST, SENDPORT);
+
     oscReceiver.setup(RECVPORT);
     
     // send ready
