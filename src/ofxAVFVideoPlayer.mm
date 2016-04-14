@@ -9,6 +9,7 @@
 #include "ofxAVFVideoPlayer.h"
 #include "Poco/String.h"
 
+
 ofxAVFVideoPlayer::ofxAVFVideoPlayer() {
     moviePlayer = NULL;
 	bNewFrame = false;
@@ -20,6 +21,8 @@ ofxAVFVideoPlayer::ofxAVFVideoPlayer() {
     
     pixelFormat = OF_PIXELS_RGB;
     currentLoopState = OF_LOOP_NONE;
+    
+   
     
 }
 

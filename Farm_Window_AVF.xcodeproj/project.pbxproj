@@ -15,7 +15,6 @@
 		510CAFE035E576A4E1502D52 /* UdpSocket.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E6DEF695B88BA5FAACEAA937 /* UdpSocket.cpp */; };
 		522FFFB6EB3DA57CCB07EF9A /* stb_truetype.c in Sources */ = {isa = PBXBuildFile; fileRef = DC55FEC740DD28FBDD2D4406 /* stb_truetype.c */; };
 		5864AD82E20F15536D054EA3 /* ofxOscMessage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DF49D76C45D5DB505A234880 /* ofxOscMessage.cpp */; };
-		591D59E0C4D5DD60F5C9A05C /* Archive.zip in Sources */ = {isa = PBXBuildFile; fileRef = DC08BA33F7805ECC07F918D2 /* Archive.zip */; };
 		5A4349E9754D6FA14C0F2A3A /* tinyxmlparser.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FC5DA1C87211D4F6377DA719 /* tinyxmlparser.cpp */; };
 		5A479B04DF062DE7431FD3BF /* ofUnicode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BF3CACAAE84A581E4AFA9FA7 /* ofUnicode.cpp */; };
 		62545D179C94265CA1389D4A /* OscOutboundPacketStream.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 63A47AC60FFAFC3BF093EC0F /* OscOutboundPacketStream.cpp */; };
@@ -26,6 +25,7 @@
 		77216AFC1BCF4AD70059CAA3 /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 77216AFB1BCF4AD70059CAA3 /* CoreMedia.framework */; };
 		77216AFE1BCF4AE20059CAA3 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 77216AFD1BCF4AE10059CAA3 /* AVFoundation.framework */; };
 		77216B001BCF4B1A0059CAA3 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 77216AFF1BCF4B1A0059CAA3 /* QuartzCore.framework */; };
+		77AFF5971C30A6E0000A9874 /* SlideShow.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 77AFF5951C30A6E0000A9874 /* SlideShow.cpp */; };
 		7B388D550037229D99E7F52A /* ofxFontStash.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8A535D3474A0EAB684CAC5D /* ofxFontStash.cpp */; };
 		801397981E78A4CBDE809376 /* fontstash.c in Sources */ = {isa = PBXBuildFile; fileRef = D5AE78144E3980BD0B4445D7 /* fontstash.c */; };
 		84FE76F2A7F0A01F2FD74AA4 /* ofxAVFVideoRenderer.m in Sources */ = {isa = PBXBuildFile; fileRef = 70DBF3BF937A66F014801810 /* ofxAVFVideoRenderer.m */; };
@@ -141,6 +141,8 @@
 		77216AFD1BCF4AE10059CAA3 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		77216AFF1BCF4B1A0059CAA3 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		77216B021BD161D40059CAA3 /* serviceList.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = serviceList.h; sourceTree = "<group>"; };
+		77AFF5951C30A6E0000A9874 /* SlideShow.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SlideShow.cpp; sourceTree = "<group>"; };
+		77AFF5961C30A6E0000A9874 /* SlideShow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SlideShow.h; sourceTree = "<group>"; };
 		81511BCA9C8DB1C0C56E3464 /* ofxRemoteUIClient.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 30; name = ofxRemoteUIClient.cpp; path = ../../../addons/ofxRemoteUI/src/ofxRemoteUIClient.cpp; sourceTree = SOURCE_ROOT; };
 		81967292BFC87A0144BD32C6 /* ofxOscSender.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 30; name = ofxOscSender.cpp; path = ../../../addons/ofxOsc/src/ofxOscSender.cpp; sourceTree = SOURCE_ROOT; };
 		81ED11CEF69C144113DE8812 /* ofxRemoteUIServer.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = ofxRemoteUIServer.h; path = ../../../addons/ofxRemoteUI/src/ofxRemoteUIServer.h; sourceTree = SOURCE_ROOT; };
@@ -173,7 +175,6 @@
 		D5AE78144E3980BD0B4445D7 /* fontstash.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 30; name = fontstash.c; path = ../../../addons/ofxFontStash/libs/fontstash/src/fontstash.c; sourceTree = SOURCE_ROOT; };
 		D8A535D3474A0EAB684CAC5D /* ofxFontStash.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 30; name = ofxFontStash.cpp; path = ../../../addons/ofxFontStash/src/ofxFontStash.cpp; sourceTree = SOURCE_ROOT; };
 		D9BFFBBF4CC43DEE890B3C3E /* OscTypes.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 30; name = OscTypes.cpp; path = ../../../addons/ofxOsc/libs/oscpack/src/osc/OscTypes.cpp; sourceTree = SOURCE_ROOT; };
-		DC08BA33F7805ECC07F918D2 /* Archive.zip */ = {isa = PBXFileReference; explicitFileType = file; fileEncoding = 30; name = Archive.zip; path = src/Archive.zip; sourceTree = SOURCE_ROOT; };
 		DC55FEC740DD28FBDD2D4406 /* stb_truetype.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 30; name = stb_truetype.c; path = ../../../addons/ofxFontStash/libs/fontstash/src/stb_truetype.c; sourceTree = SOURCE_ROOT; };
 		DEADD830DF372B115C69DA47 /* ofxAVFVideoPlayer.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = ofxAVFVideoPlayer.h; path = src/ofxAVFVideoPlayer.h; sourceTree = SOURCE_ROOT; };
 		DF49D76C45D5DB505A234880 /* ofxOscMessage.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 30; name = ofxOscMessage.cpp; path = ../../../addons/ofxOsc/src/ofxOscMessage.cpp; sourceTree = SOURCE_ROOT; };
@@ -583,12 +584,13 @@
 				E4B69E1D0A3A1BDC003C02F2 /* main.cpp */,
 				E4B69E1E0A3A1BDC003C02F2 /* ofApp.cpp */,
 				E4B69E1F0A3A1BDC003C02F2 /* ofApp.h */,
-				DC08BA33F7805ECC07F918D2 /* Archive.zip */,
 				DEADD830DF372B115C69DA47 /* ofxAVFVideoPlayer.h */,
 				0A0F4F215F7340416E93656B /* ofxAVFVideoPlayer.mm */,
 				2A7EF30C5F5EF811EDDF242C /* ofxAVFVideoRenderer.h */,
 				70DBF3BF937A66F014801810 /* ofxAVFVideoRenderer.m */,
 				77216B021BD161D40059CAA3 /* serviceList.h */,
+				77AFF5951C30A6E0000A9874 /* SlideShow.cpp */,
+				77AFF5961C30A6E0000A9874 /* SlideShow.h */,
 			);
 			path = src;
 			sourceTree = SOURCE_ROOT;
@@ -746,7 +748,6 @@
 			files = (
 				E4B69E200A3A1BDC003C02F2 /* main.cpp in Sources */,
 				E4B69E210A3A1BDC003C02F2 /* ofApp.cpp in Sources */,
-				591D59E0C4D5DD60F5C9A05C /* Archive.zip in Sources */,
 				E42539201C05821913F45EAC /* ofxAVFVideoPlayer.mm in Sources */,
 				84FE76F2A7F0A01F2FD74AA4 /* ofxAVFVideoRenderer.m in Sources */,
 				CD2B7242E152B8EBF3E65F20 /* ofxRemoteUI.cpp in Sources */,
@@ -776,6 +777,7 @@
 				801397981E78A4CBDE809376 /* fontstash.c in Sources */,
 				522FFFB6EB3DA57CCB07EF9A /* stb_truetype.c in Sources */,
 				B0F2688D773B5C8FB13237F8 /* ofTextConverter.cpp in Sources */,
+				77AFF5971C30A6E0000A9874 /* SlideShow.cpp in Sources */,
 				5A479B04DF062DE7431FD3BF /* ofUnicode.cpp in Sources */,
 				AD7CCE180C5BEF646A1B62E1 /* ofUTF8.cpp in Sources */,
 				F9EDA805D342EB30D9A8D97E /* ofxGiantImage.cpp in Sources */,
@@ -849,7 +851,7 @@
 					../../../addons/ofxGiantImage/libs,
 					../../../addons/ofxGiantImage/src,
 				);
-				MACOSX_DEPLOYMENT_TARGET = 10.6;
+				MACOSX_DEPLOYMENT_TARGET = 10.10;
 				OTHER_CPLUSPLUSFLAGS = (
 					"-D__MACOSX_CORE__",
 					"-lpthread",
@@ -916,7 +918,7 @@
 					../../../addons/ofxGiantImage/libs,
 					../../../addons/ofxGiantImage/src,
 				);
-				MACOSX_DEPLOYMENT_TARGET = 10.6;
+				MACOSX_DEPLOYMENT_TARGET = 10.10;
 				OTHER_CPLUSPLUSFLAGS = (
 					"-D__MACOSX_CORE__",
 					"-lpthread",

@@ -1,8 +1,34 @@
+/***
+ * PROJECT FARM WINDOW - MACHINE A
+ *              ____                                    ,--,                 ,--.
+ *            ,'  , `.   ,---,         ,----..        ,--.'|   ,---,       ,--.'|    ,---,.                         ,---,
+ *         ,-+-,.' _ |  '  .' \       /   /   \    ,--,  | :,`--.' |   ,--,:  : |  ,'  .' |                        '  .' \
+ *      ,-+-. ;   , || /  ;    '.    |   :     :,---.'|  : '|   :  :,`--.'`|  ' :,---.'   |                       /  ;    '.
+ *     ,--.'|'   |  ;|:  :       \   .   |  ;. /|   | : _' |:   |  '|   :  :  | ||   |   .'                      :  :       \
+ *    |   |  ,', |  '::  |   /\   \  .   ; /--` :   : |.'  ||   :  |:   |   \ | ::   :  |-,                      :  |   /\   \
+ *    |   | /  | |  |||  :  ' ;.   : ;   | ;    |   ' '  ; :'   '  ;|   : '  '; |:   |  ;/|                      |  :  ' ;.   :
+ *    '   | :  | :  |,|  |  ;/  \   \|   : |    '   |  .'. ||   |  |'   ' ;.    ;|   :   .'                      |  |  ;/  \   \
+ *    ;   . |  ; |--' '  :  | \  \ ,'.   | '___ |   | :  | ''   :  ;|   | | \   ||   |  |-,                      '  :  | \  \ ,'
+ *    |   : |  | ,    |  |  '  '--'  '   ; : .'|'   : |  : ;|   |  ''   : |  ; .''   :  ;/|                      |  |  '  '--'
+ *    |   : '  |/     |  :  :        '   | '/  :|   | '  ,/ '   :  ||   | '`--'  |   |    \                      |  :  :
+ *    ;   | |`-'      |  | ,'        |   :    / ;   : ;--'  ;   |.' '   : |      |   :   .'                      |  | ,'
+ *    |   ;/          `--''           \   \ .'  |   ,/      '---'   ;   |.'      |   | ,'                        `--''
+ *    '---'                            `---`    '---'               '---'        `----'
+ *
+ */
+
+
+
 #include "ofApp.h"
 #
-#ifndef REMOTE_CONTROL
-#define REMOTE_CONTROL
+#ifndef USE_REMOTE_CONTROL
+#define USE_REMOTE_CONTROL
 #endif
+
+#ifndef USE_VIDEO_SYNC
+#define USE_VIDEO_SYNC
+#endif
+
 
 
 float x;
@@ -12,136 +38,57 @@ ofColor color;
 int w = 0;
 int i = 0;
 int loopCounter = 0;
-static const int N_VIDEO_PLAYERS = 2;
-string ASSEST_VIDOE_FOLDER = "movies/A/";
+static const int N_VIDEO_PLAYERS = 9;
+string ASSET_VIDEO_FOLDER = "movies/";
+string ASSET_IMAGE_FOLDER = "images/";
+string ASSET_HYBRID_IMAGE_FOLDER = "images/small/";
 
 int frameJump;
 
-void ofApp::loadVideo(string filename){
-
-    ofDirectory dir;
-    dir.open(ASSEST_VIDOE_FOLDER);
-    //int numFiles = dir.listDir();
-    string path = dir.path() + filename;
-    videoPlayers[i]->loadMovie(path);
-
-    
-//    ofDirectory dir;
-//    dir.open(ASSEST_VIDOE_FOLDER);
-//    int numFiles = dir.listDir();
-//
-//    for (int i = 0; i < numFiles; ++i)
-//    {
-//        cout << "Path at index [" << i << "] = " << dir.getPath(i) << endl;
-//        videoPlayers.push_back(new ofxAVFVideoPlayer());
-//        videoPlayers[i]->loadMovie(dir.getPath(i));
-//        videoPlayers[i]->setLoopState(OF_LOOP_NORMAL);
-//        videoPlayers[i]->play();
-//    }
-}
-
-//--------------------------------------------------------------
-void ofApp::setup(){
-    
-    
-    ofSetVerticalSync(true);
-    ofSetFrameRate(60);
-    
-    // for single delivery package
-    //ofSetDataPathRoot("./");
-    
-    
-    ofDirectory dir;
-    dir.open(ASSEST_VIDOE_FOLDER);
-    int numFiles = dir.listDir();
-    
-    for (int i = 0; i < numFiles; ++i)
-    {
-        cout << "Path at index [" << i << "] = " << dir.getPath(i) << endl;
-        videoPlayers.push_back(new ofxAVFVideoPlayer());
-        videoPlayers[i]->loadMovie(dir.getPath(i));
-        videoPlayers[i]->setLoopState(OF_LOOP_NORMAL);
-        videoPlayers[i]->play();
-    }
-    
-    
-    // load video
-//    for(int i=0; i<N_VIDEO_PLAYERS; i++) {
-//        videoPlayers.push_back(new ofxAVFVideoPlayer());
-//        videoPlayers[i]->loadMovie("movies/farm_window.mov");
-//        videoPlayers[i]->setLoopState(OF_LOOP_NORMAL);
-//    }
-    
-//    // load images
-//    imgBottom = new ofImage();
-//    imgTop = new ofImage();
-//    
-//    imgBottom->loadImage("images/L2.jpg");
-//    imgTop->loadImage("images/L1.jpg");
-    
-    
-    // load image using ofxGiantImage
-    //imgTopx = new ofxGiantImage();
-    //imgTopx->loadImage("images/L1.jpg");
-    imgTop = new ofxGiantImage();
-    imgBottom = new ofxGiantImage();
-    imgBottom->loadImage("images/L2.jpg"); //papaya
-    imgTop->loadImage("images/L1.jpg");
-    
-    imgTopPosters.push_back(imgTop);
-    
-    // enable trace to file
-    //ofLogToFile("myLogFile.txt", true);
-    
-    // initilization
-    videoPause = false;
-    imageDisplay = false;
-    dbgImg = false;
-    isDemoMode = false;
-    isUpdateImg = false;
-    isDownloadImg = false;
-    imgRotateIndex = 0;
+#define ALL_DAY (-99)
 
 
-#ifdef REMOTE_CONTROL
+void ofApp::InitRemoteControlUI() {
+
+#ifdef USE_REMOTE_CONTROL
     ////////////////////////////////////////////////////////
     // Remote UI
     
     RUI_SETUP(); //start server
-    RUI_SHARE_PARAM(isDemoMode, ofColor(255,0,0,64));
     
-    // SET PARAM GROUPS / COLORS //////////////////////////////////
-    RUI_NEW_GROUP("Poster");	//make a new group (optional)
+    // SETUP A CALLBACK ///////////////////////////////////////////
+    //ofAddListener(RUI_GET_OF_EVENT(), this, &testApp::clientDidSomething);
     
-    // SHARE A STRING PARAM ////////////////////////////////
-    strPoster = " ";
-    RUI_SHARE_PARAM(strPoster, ofColor(255,0,0,64));	// you can also set a color on a per-param basis
+    RUI_GET_INSTANCE()->setVerbose(true);
+//    RUI_SHARE_PARAM(isDemoMode, ofColor(255,0,0,64));
+    
+//    // SET PARAM GROUPS / COLORS //////////////////////////////////
+//    RUI_NEW_GROUP("Poster");	//make a new group (optional)
+//    
+//    // SHARE A STRING PARAM ////////////////////////////////
+//    strPoster = " ";
+//    RUI_SHARE_PARAM(strPoster, ofColor(255,0,0,64));	// you can also set a color on a per-param basis
     //Expose x and y vars to the server, providing a valid slider range
-    RUI_SHARE_PARAM(x, 0, ofGetWidth());
-    RUI_SHARE_PARAM(y, 0, ofGetHeight());
-    
-    strUpdateFileDate = "";
-    RUI_SHARE_PARAM(strUpdateFileDate);
+    //RUI_SHARE_PARAM(logoX, 0, ofGetWidth());
+    RUI_SHARE_PARAM(logoY, 0, ofGetHeight());
+//
+//    strUpdateFileDate = "";
+//    RUI_SHARE_PARAM(strUpdateFileDate);
     
     //share the color param
     //RUI_SHARE_COLOR_PARAM(color);
     
     
     // SET PARAM GROUPS / COLORS //////////////////////////////////
-    RUI_NEW_GROUP("Video");	//make a new group (optional)
+    RUI_NEW_GROUP("UPDATE VEGETABLE %");	//make a new group (optional)
     
-    strFruitPrefix = "今天的苹果好好吃，总共有 ";
-    strUnit = " 颗";
-    currentAppleAmount = "0";
+    strFruitPrefix = "";
+    strUnit = "%";
+    currentAppleAmount = "65";
     RUI_SHARE_PARAM(currentAppleAmount, ofColor(255,0,0,64));	// you can also set a color on a per-param basis
     
-    
-    // SHARE AN ENUM PARAM ////////////////////////////////
-    //build a string list for the UI to show
-//    menu = MENU_OPTION_1;
-//    string menuItems[] = {"MENU_OPTION_0", "MENU_OPTION_1", "MENU_OPTION_2", "MENU_OPTION_3"};
-//    //privide the enum param, loweset enum, highest enum, and the Enum string list
-//    RUI_SHARE_ENUM_PARAM(menu, MENU_OPTION_0, MENU_OPTION_3, menuItems);
+    // SHARE A BOOL PARAM ////////////////////////////////////////
+    RUI_SHARE_PARAM(isShowPercentage);
     
     
     // SHARE A string PARAM to unload it later;
@@ -169,9 +116,59 @@ void ofApp::setup(){
     //useful for debugging
     RUI_GET_INSTANCE()->setBuiltInUiScale(3);
     RUI_GET_INSTANCE()->drawUiWithFontStash("SourceHanSansSC-Light.ttf");
-
-#endif
     
+#endif
+
+}
+
+//--------------------------------------------------------------
+void ofApp::setup(){
+    
+    
+    // turn off ESC quit
+    ofSetEscapeQuitsApp(false);
+
+    ofSetVerticalSync(true);
+    //ofEnableAntiAliasing();
+    //ofSetFrameRate(60);
+    
+    // for single delivery package
+    //ofSetDataPathRoot("./");
+    
+    
+    slideshow.setup(ofToDataPath("slideshow/morning", true));
+    slideshowAfternoon.setup(ofToDataPath("slideshow/afternoon", true));
+    slideshowNight.setup(ofToDataPath("slideshow/night", true));
+
+    PreloadAsset();
+    
+    
+    // enable trace to file
+    ofLogToFile("FW_SH_02_HBD_A_LOG.txt", true);
+    
+    // initilization
+    videoPause = false;
+    imageDisplay = false;
+    dbgImg = false;
+    isDemoMode = false;
+    isDebugMode = false;
+    isUpdateImg = false;
+    isDownloadImg = false;
+    isShowCursor = false;
+    isSlideShow = false;
+    isHybridVideoLoaded = false;
+    imgRotateIndex = 0;
+    previousCellKickTime = -1;
+    previousPeriod = -1;
+    countOne, countTwo, countThree = 0;
+    hybridPosterCount = 0;
+    prevHybridSeq = -1;
+    isShowPercentage = true;
+    
+    // remote controller
+    InitRemoteControlUI();
+
+
     // load font
     unicodeFont.setup("SourceHanSansSC-Light.ttf", //font file, ttf only
                       1.0,					//lineheight percent
@@ -182,13 +179,43 @@ void ofApp::setup(){
                       );					//lower res mipmaps wil bleed into each other
     
     
-    FZLfont.setup("FZLTZCHJW.ttf", //font file, ttf only
+    FZLfont.setup("FZLTZCHJW.TTF", //font file, ttf only
                       1.0,					//lineheight percent
                       1024,					//texture atlas dimension
                       true,					//create mipmaps of the font, useful to scale down the font at smaller sizes
                       8,					//texture atlas element padding, shouldbe >0 if using mipmaps otherwise
                       2.0f					//dpi scaleup, render textures @2x the reso
                       );					//lower res mipmaps wil bleed into each other
+    
+    
+    posterfont.setup("BrandonGrotesque-Regular.ttf", //font file, ttf only
+                  1.0,					//lineheight percent
+                  1024,					//texture atlas dimension
+                  true,					//create mipmaps of the font, useful to scale down the font at smaller sizes
+                  8,					//texture atlas element padding, shouldbe >0 if using mipmaps otherwise
+                  2.0f					//dpi scaleup, render textures @2x the reso
+                  );					//lower res mipmaps wil bleed into each other
+    
+    percentagefont.setup("BrandonGrotesque-Bold.ttf", //font file, ttf only
+                     1.0,					//lineheight percent
+                     1024,					//texture atlas dimension
+                     true,					//create mipmaps of the font, useful to scale down the font at smaller sizes
+                     8,					//texture atlas element padding, shouldbe >0 if using mipmaps otherwise
+                     2.0f					//dpi scaleup, render textures @2x the reso
+                     );					//lower res mipmaps wil bleed into each other
+    
+    
+
+
+    
+    strPosterLeft = (string)"SHANDONG, YANTAI";
+    strPosterLeftCh = (string)"        山东烟台";
+    
+    strPosterRight = (string)"A HUNTER GATHERER FARM";
+    strPosterRightCh = (string)"             悦衡食集农场";
+    percentageBk.loadImage("poster_veg_bk.png");
+    logoBk.loadImage("logo_small.png");
+
     
 //    char serverPath[512] = "http://www.vim.org/scripts/download_script.php?src_id=7701"; //TODO: move to url list
 //    char filePath[256] = "poster_01.zip";
@@ -206,45 +233,259 @@ void ofApp::setup(){
     initTimeDbg = ofGetElapsedTimef();
     ofRegisterURLNotification(this);
     
+ 
     // osc
     oscSender.setup(HOST, SENDPORT);
     oscReceiver.setup(RECVPORT);
     
     // send ready
-    msgSend.setAddress("/sync/start/FW_SH_02_HBD_A");
-    msgSend.addStringArg("ready");
-    oscSender.sendMessage(msgSend);
-
+    ofxOscMessage m;
+    m.setAddress("/sync/start/FW_SH_02_HBD_A");
+    m.addStringArg("ready");
+    cout << "+++ A: OSC SEND: " << ofGetTimestampString() << "\r\n";
+    oscSender.sendMessage(m);
+    cout << "--- A: OSC SEND: " << ofGetTimestampString() << "\r\n";
+    
+   
 }
 
+
+void ofApp::PreloadAsset() {
+
+    
+    ofDirectory dir;
+    dir.open(ASSET_IMAGE_FOLDER);
+    int numFiles = dir.listDir();
+    
+    for (int i = 0; i < numFiles; ++i)
+    {
+        //cout << "Path at index [" << i << "] = " << dir.getPath(i) << endl;
+        //videoPlayers[i]->play();
+        // preload poster image
+        //imgBottom = new ofxGiantImage();
+        //imgBottom->loadImage("images/A_1_TOP_20151127.jpg"); //papaya
+        cout << "Preload image:(" << i << "/" << numFiles << ") " << dir.getPath(i) << "\r\n";
+        imgTop = new ofxGiantImage();
+        imgTop->loadImage(dir.getPath(i));
+        imgTopPosters.push_back(imgTop);
+    }
+    
+    dir.open(ASSET_HYBRID_IMAGE_FOLDER);
+    numFiles = dir.listDir();
+    
+    
+    for (int i = 0; i < numFiles; ++i)
+    {
+        //cout << "Path at index [" << i << "] = " << dir.getPath(i) << endl;
+        //videoPlayers[i]->play();
+        // preload poster image
+        //imgBottom = new ofxGiantImage();
+        //imgBottom->loadImage("images/A_1_TOP_20151127.jpg"); //papaya
+        cout << "load hybrid image:(" << i << "/" << numFiles << ") " << dir.getPath(i) << "\r\n";
+        imgHybrid = new ofImage();
+        imgHybrid->loadImage(dir.getPath(i));
+        imgTopHybridPosters.push_back(imgHybrid);
+    }
+    
+    
+    if (timePeriod == 0) {
+        
+        videoPlayers.push_back(new ofxAVFVideoPlayer());
+        videoPlayers[0]->loadMovie("movies/A_M_1.mov");
+        videoPlayers[0]->setLoopState(OF_LOOP_NORMAL);
+        
+        videoPlayers.push_back(new ofxAVFVideoPlayer());
+        videoPlayers[1]->loadMovie("movies/A_M_2.mov");
+        videoPlayers[1]->setLoopState(OF_LOOP_NORMAL);
+        
+        videoPlayers.push_back(new ofxAVFVideoPlayer());
+        videoPlayers[2]->loadMovie("movies/A_M_3.mov");
+        videoPlayers[2]->setLoopState(OF_LOOP_NORMAL);
+        
+        
+    }
+    else if (timePeriod == 1) {
+        
+        videoPlayers.push_back(new ofxAVFVideoPlayer());
+        videoPlayers[0]->loadMovie("movies/A_A_1.mov");
+        videoPlayers[0]->setLoopState(OF_LOOP_NORMAL);
+        
+        videoPlayers.push_back(new ofxAVFVideoPlayer());
+        videoPlayers[1]->loadMovie("movies/A_A_2.mov");
+        videoPlayers[1]->setLoopState(OF_LOOP_NORMAL);
+        
+        videoPlayers.push_back(new ofxAVFVideoPlayer());
+        videoPlayers[2]->loadMovie("movies/A_A_3.mov");
+        videoPlayers[2]->setLoopState(OF_LOOP_NORMAL);
+        
+    }
+    else if (timePeriod == 2) {
+        videoPlayers.push_back(new ofxAVFVideoPlayer());
+        videoPlayers[0]->loadMovie("movies/A_E_1.mov");
+        videoPlayers[0]->setLoopState(OF_LOOP_NORMAL);
+        
+        videoPlayers.push_back(new ofxAVFVideoPlayer());
+        videoPlayers[1]->loadMovie("movies/A_E_2.mov");
+        videoPlayers[1]->setLoopState(OF_LOOP_NORMAL);
+        
+        videoPlayers.push_back(new ofxAVFVideoPlayer());
+        videoPlayers[2]->loadMovie("movies/A_E_3.mov");
+        videoPlayers[2]->setLoopState(OF_LOOP_NORMAL);
+        
+    }
+
+    
+}
+
+
+void ofApp::LoadCurrentVideo(int timePeriod) {
+    
+    if (timePeriod == previousPeriod)
+        return;
+    
+    
+    if (timePeriod == 0) {
+        
+        videoPlayers.push_back(new ofxAVFVideoPlayer());
+        videoPlayers[0]->loadMovie("movies/A_M_1.mov");
+        videoPlayers[0]->setLoopState(OF_LOOP_NORMAL);
+        
+        videoPlayers.push_back(new ofxAVFVideoPlayer());
+        videoPlayers[1]->loadMovie("movies/A_M_2.mov");
+        videoPlayers[1]->setLoopState(OF_LOOP_NORMAL);
+        
+        videoPlayers.push_back(new ofxAVFVideoPlayer());
+        videoPlayers[2]->loadMovie("movies/A_M_3.mov");
+        videoPlayers[2]->setLoopState(OF_LOOP_NORMAL);
+            
+    }
+    else if (timePeriod == 1) {
+        
+        videoPlayers.push_back(new ofxAVFVideoPlayer());
+        videoPlayers[0]->loadMovie("movies/A_A_1.mov");
+        videoPlayers[0]->setLoopState(OF_LOOP_NORMAL);
+        
+        videoPlayers.push_back(new ofxAVFVideoPlayer());
+        videoPlayers[1]->loadMovie("movies/A_A_2.mov");
+        videoPlayers[1]->setLoopState(OF_LOOP_NORMAL);
+        
+        videoPlayers.push_back(new ofxAVFVideoPlayer());
+        videoPlayers[2]->loadMovie("movies/A_A_3.mov");
+        videoPlayers[2]->setLoopState(OF_LOOP_NORMAL);
+    
+    }
+    else if (timePeriod == 2) {
+        videoPlayers.push_back(new ofxAVFVideoPlayer());
+        videoPlayers[0]->loadMovie("movies/A_E_1.mov");
+        videoPlayers[0]->setLoopState(OF_LOOP_NORMAL);
+        
+        videoPlayers.push_back(new ofxAVFVideoPlayer());
+        videoPlayers[1]->loadMovie("movies/A_E_2.mov");
+        videoPlayers[1]->setLoopState(OF_LOOP_NORMAL);
+        
+        videoPlayers.push_back(new ofxAVFVideoPlayer());
+        videoPlayers[2]->loadMovie("movies/A_E_3.mov");
+        videoPlayers[2]->setLoopState(OF_LOOP_NORMAL);
+    
+    }
+    else if (timePeriod == ALL_DAY) {
+        
+        if (!isHybridVideoLoaded) {
+            videoPlayers.push_back(new ofxAVFVideoPlayer());
+            videoPlayers[0]->loadMovie("movies/1.mov");
+            videoPlayers[0]->setLoopState(OF_LOOP_NORMAL);
+            
+            videoPlayers.push_back(new ofxAVFVideoPlayer());
+            videoPlayers[1]->loadMovie("movies/2.mov");
+            videoPlayers[1]->setLoopState(OF_LOOP_NORMAL);
+            
+            videoPlayers.push_back(new ofxAVFVideoPlayer());
+            videoPlayers[2]->loadMovie("movies/3.mov");
+            videoPlayers[2]->setLoopState(OF_LOOP_NORMAL);
+            isHybridVideoLoaded = true;
+        }
+        
+    }
+   }
+
+
+//void ofApp::LoadCurrentSlideshows(int timePeriod) {
+//
+//    if (timePeriod == previousPeriod)
+//        return;
+//    
+//    
+//    if (timePeriod == 0) {
+//        slideshow.setup(ofToDataPath("slideshow/morning", true));
+//        
+//    }
+//    else if (timePeriod == 1) {
+//        slideshow.setup(ofToDataPath("slideshow/afternoon", true));
+//
+//    }
+//    else if (timePeriod == 2) {
+//        slideshow.setup(ofToDataPath("slideshow/night", true));
+//    }
+//}
+
+
+
+float t = 0;
 
 //--------------------------------------------------------------
 void ofApp::update(){
     
-//    int i=0;
-//    for(auto p : videoPlayers) {
-//        p->update();
-//        if(true || p->isLoaded()) {
-//            if(ofGetElapsedTimef() > i++ * 0.5)
-//                p->play();
-//        }
-//    }
-    
     if (!videoPause) {
-        int t = 0;
-        for (int j = 0; j < videoPlayers.size(); j++) {
-            videoPlayers[j]->update();
-            videoPlayers[j]->play();
-            
+        int j = 0;
         
-//        videoPlayers[i]->update();
-//        if (true || videoPlayers[i]->isLoaded()) {
-//
-//            if (ofGetElapsedTimef() > t++ * 0.5)
-//                videoPlayers[i]->play();
-//        }
+        if (true || videoPlayers[j]->isLoaded()) {
+
+            for (j; j < videoPlayers.size(); j++) {
+                videoPlayers[j]->update();
+                //videoPlayers[j]->play();
+                //t =  ofGetElapsedTimef() - initTime;
+                //if (t > 1.0)
+                    videoPlayers[j]->play();
+            }
         }
+        
+        initTime = ofGetElapsedTimef();
+        
     }
+    
+    if (isSlideShow) {
+        if (timePeriod == 0) {
+            slideshow.update(slideshowSeq);
+        }
+        else if (timePeriod == 1) {
+            slideshowAfternoon.update(slideshowSeq);
+        }
+        else if (timePeriod == 2) {
+            slideshowNight.update(slideshowSeq);
+        }
+
+    }
+    
+    if (isHybrid) {
+        
+    
+//        for (int j=0; j < videoPlayers.size(); j++) {
+//            videoPlayers[j]->update();
+//            videoPlayers[j]->stop();
+//        }
+        
+        for (auto p: videoPlayers) {
+            if(true || p->isLoaded()) {
+                p->update();
+                p->setVolume(0.0);
+            }
+        }
+
+        videoPlayers[hybridVideoNum]->play();
+
+    }
+        
+    initTime = ofGetElapsedTimef();
     fps = ofGetFrameRate();
 }
 
@@ -254,7 +495,7 @@ void ofApp::draw(){
     int frameDiff;
     
     while (oscReceiver.hasWaitingMessages()) {
-        cout << "New msg is coming + ";
+        //cout << "New msg is coming... \r\n";
         ofxOscMessage m;
         oscReceiver.getNextMessage(&m);
         
@@ -263,123 +504,234 @@ void ofApp::draw(){
             cout << "Frame sync, jump(" << frameJump << ") frames\r\n";
             
             // do move forward
-            videoPlayers[i]->setFrame(frameJump);
+            //videoPlayers[i]->setFrame(frameJump);
         }
-        else if (m.getAddress() == "/sync/play/nowPlayingFile") {
-            // can I get all the file list from the beginning?
-            loadVideo(m.getArgAsString(0));
+        else if (m.getAddress() == "/sync/start/nowPlayingInfo/poster") {
+            imageDisplay = true;
+            videoPause = true;
+            isSlideShow = false;
+            isHybridVideoLoaded = false;
+            isHybrid = false;
+            
+            timePeriod = m.getArgAsInt32(0);
+            posterSeq = m.getArgAsInt32(1);
+            
+            cout << "[POSTER SYNC INFO] " << ofGetTimestampString() << "time:" << timePeriod << ", seq#" << posterSeq << "\r\n";
+            canIStart = true;
+            isHybridVideoLoaded = false;
+            
         }
-        else if (m.getAddress() == "/sync/play/nowPlayingStart") {
-            isCellStart = m.getArgAsInt32(0);
+        else if (m.getAddress() == "/sync/start/nowPlayingInfo/video") {
+            imageDisplay = false;
+            videoPause = false;
+            isSlideShow = false;
+            isHybridVideoLoaded = false;
+            isHybrid = false;
+
+            
+            timePeriod = m.getArgAsInt32(0);
+            videoSeq = m.getArgAsInt32(1);
+            cellKickTime = m.getArgAsInt32(2);
+            
+            //preload video
+            LoadCurrentVideo(timePeriod);
+
+            
+            if (cellKickTime > previousCellKickTime)
+                isCellStart = true;
+
+
+            i = videoSeq + 0;
+            previousPeriod = timePeriod;
+            
+            // add canIstart here
+            canIStart = true;
+            
+            cout << "[VIDEO SYNC INFO]" << ofGetTimestampString() << " time:" << timePeriod << ", seq#" << videoSeq << ", kick:" << cellKickTime << "\r\n";
         }
-        else if (m.getAddress() == "/sync/play/nowPlayingStop") {
-            isCellStop = m.getArgAsInt32(0);
+        else if (m.getAddress() == "/sync/start/FW_SH_02_HBD_A/RUTHERE") {
+            // send ready
+            cout << "Yes, I'm here..." << "\r\n";
+            ofxOscMessage m;
+            m.setAddress("/sync/start/FW_SH_02_HBD_A");
+            m.addStringArg("ready");
+            //cout << "+++ A: OSC SEND: " << ofGetTimestampString() << "\r\n";
+            oscSender.sendMessage(m);
+            //cout << "--- A: OSC SEND: " << ofGetTimestampString() << "\r\n";
+           
         }
-        else if (m.getAddress() == "/sync/play/type") {
-            mediaType = m.getArgAsString(0);
+        else if (m.getAddress() == "/sync/start/nowPlayingInfo/slideshow") {
+            imageDisplay = false;
+            videoPause = true;
+            isSlideShow = true;
+            isHybridVideoLoaded = false;
+            isHybrid = false;
+            
+            timePeriod = m.getArgAsInt32(0);
+            slideshowSeq = m.getArgAsInt32(1);
+            
+            cout << "[SLIDESHOW SYNC INFO] " << ofGetTimestampString() << "time:" << timePeriod << ", seq#" << slideshowSeq << "\r\n";
+            
+            //LoadCurrentSlideshows(timePeriod);
+            previousPeriod = timePeriod;
+            
         }
-        else if (m.getAddress() == "/sync/play/nowPlayingKickTime") {
-            cellKickTime = m.getArgAsInt32(0);
+        else if (m.getAddress() == "/sync/start/nowPlayingInfo/hybrid") {
+            imageDisplay = false;
+            videoPause = true;
+            isSlideShow = false;
+            isHybrid = true;
+            
+            timePeriod = m.getArgAsInt32(0);
+            hybridshowSeq = m.getArgAsInt32(1);
+            cellKickTime = m.getArgAsInt32(2);
+
+            
+            if (cellKickTime > previousCellKickTime)
+                isCellStart = true;
+
+            
+            cout << "[HYBRID SYNC INFO] " << ofGetTimestampString() << "time:" << timePeriod << ", seq#" << hybridshowSeq << "\r\n";
+            hybridVideoNum = hybridshowSeq;
+            
+            if (hybridshowSeq == prevHybridSeq && hybridPosterCount <2)
+                hybridPosterCount++;
+            else {
+                hybridPosterCount = 0;
+                videoPlayers[hybridVideoNum]->setPosition(0.0);
+            }
+            
+
+            
+            LoadCurrentVideo(ALL_DAY);
+            previousPeriod = timePeriod; //TODO: this is potential issue
+            canIStart = true;
         }
         //dumpOSC(m);
     }
     
-    strFruitString =  strFruitPrefix + ofToString(currentAppleAmount) + strUnit;
+    
+    //////////////////////////////////////
+    //isSlideShow = true;
+    //slideshow.draw();
+    /////////////////////////////////////
+    
+
+    
+    strFruitString =  ofToString(currentAppleAmount) + strUnit;
+    
+    if (!canIStart)
+        return;
+    
     
     if (!videoPause) {
-//        if (((videoPlayers[i]->getPosition() * videoPlayers[i]->getDuration()) - videoPlayers[i]->getDuration()) == 0){
-//            
-//            if (i < N_VIDEO_PLAYERS-1) {
-//                i++;
-//            }
-//            else {
-//                i = 0;
-//                loopCounter++;
-//            }
-//        }
-        
-        //for(auto p : videoPlayers) {
-        //        p->draw(ofMap(i++, 0, videoPlayers.size(), 0, ofGetWidth()), ofGetHeight()/2 - 108*2, 192*4, 108*4);
-        
-        //ofPushMatrix();
-        //ofSetColor(ofRandom(255), 0, 0);
-//        ofRect(0,0,ofGetWidth(),ofGetHeight());
-//        ofEnableAlphaBlending();
-//        ofSetColor(255,255,255);
-//        
-#if 0   // for 1080 x 3840 video
-        //---------------------------------------------------------- draw video texture to fullscreen.
-        ofRectangle screenRect(0, 0, ofGetWidth(), ofGetHeight());
-        ofRectangle videoRect(0, 0, videoPlayers[i]->getWidth(), videoPlayers[i]->getHeight());
-        ofRectangle videoFullscreenRect = videoRect;
-        videoFullscreenRect.scaleTo(screenRect, OF_ASPECT_RATIO_KEEP_BY_EXPANDING);
-        
-        videoPlayers[i]->draw(0, 0, videoFullscreenRect.getWidth(), videoFullscreenRect.getHeight());
-        
-#endif
-        
-#if 1
-        // for 2 1080 x 1920 videos
-        //---------------------------------------------------------- draw video texture to fullscreen.
-        
-        for (int videoNum = 0; videoNum < videoPlayers.size(); videoNum++) {
-            if (videoNum == 1) { //top
-                ofRectangle screenRect(0, 0, ofGetWidth(), ofGetHeight()/2);
-                ofRectangle videoRect(0, 0, videoPlayers[videoNum]->getWidth(), videoPlayers[videoNum]->getHeight());
-                ofRectangle videoFullscreenRect = videoRect;
-                videoFullscreenRect.scaleTo(screenRect, OF_ASPECT_RATIO_KEEP_BY_EXPANDING);
-                videoPlayers[videoNum]->draw(0, 0, videoFullscreenRect.getWidth(), videoFullscreenRect.getHeight());
+        // update kicktime
+        // 0 -> 60 -> 90 -> 0 ->
+        if (isCellStart) {
+            
+            // start time: 0
+            if (cellKickTime == 0) {
+                videoPlayers[i]->setPaused(true);
+                cout << "set position: " << cellKickTime/videoPlayers[i]->getDuration() << "\r\n";
+                videoPlayers[i]->setPosition(cellKickTime/videoPlayers[i]->getDuration());
+                videoPlayers[i]->setPaused(false);
+                previousCellKickTime = -1;
+                cellKickTime = -1;
             }
-            else if (videoNum == 0) { //bottom
-                ofRectangle screenRect(0, 0, ofGetWidth(), ofGetHeight()/2);
-                ofRectangle videoRect(0, 0, videoPlayers[videoNum]->getWidth(), videoPlayers[videoNum]->getHeight());
-                ofRectangle videoFullscreenRect = videoRect;
-                videoFullscreenRect.scaleTo(screenRect, OF_ASPECT_RATIO_KEEP_BY_EXPANDING);
-                videoPlayers[videoNum]->draw(0, ofGetHeight()/2, videoFullscreenRect.getWidth(), videoFullscreenRect.getHeight());
+            else if (cellKickTime > previousCellKickTime) {
+                //move forward video
+                // int duration = videoPlayers[i]->getDuration();
+                videoPlayers[i]->setPaused(true);
+                cout << "set position: " << cellKickTime/videoPlayers[i]->getDuration() << "\r\n";
+                videoPlayers[i]->setPosition(cellKickTime/videoPlayers[i]->getDuration());
+                videoPlayers[i]->setPaused(false);
+                previousCellKickTime = cellKickTime;
+                // when to set previousCellKickTime to -1?
             }
         }
-
         
-        if (i < N_VIDEO_PLAYERS-1) {
-            i++;
-        }
-        else {
-            i = 0;
-            //loopCounter++;
-        }
-
-        
+#if 1   // for 1080 x 3840 video
+            //---------------------------------------------------------- draw video texture to fullscreen.
+            ofRectangle screenRect(0, 0, ofGetWidth(), ofGetHeight());
+            ofRectangle videoRect(0, 0, videoPlayers[i]->getWidth(), videoPlayers[i]->getHeight());
+            ofRectangle videoFullscreenRect = videoRect;
+            videoFullscreenRect.scaleTo(screenRect, OF_ASPECT_RATIO_KEEP_BY_EXPANDING);
+            videoPlayers[i]->draw(0, 0, videoFullscreenRect.getWidth(), videoFullscreenRect.getHeight());
 #endif
+#if 0
+            // for 2 1080 x 1920 videos
+            //---------------------------------------------------------- draw video texture to fullscreen.
+            
+            for (int videoNum = 0; videoNum < videoPlayers.size(); videoNum++) {
+                if (videoNum == 1) { //top
+                    ofRectangle screenRect(0, 0, ofGetWidth(), ofGetHeight()/2);
+                    ofRectangle videoRect(0, 0, videoPlayers[videoNum]->getWidth(), videoPlayers[videoNum]->getHeight());
+                    ofRectangle videoFullscreenRect = videoRect;
+                    videoFullscreenRect.scaleTo(screenRect, OF_ASPECT_RATIO_KEEP_BY_EXPANDING);
+                    videoPlayers[videoNum]->draw(0, 0, videoFullscreenRect.getWidth(), videoFullscreenRect.getHeight());
+                }
+                else if (videoNum == 0) { //bottom
+                    ofRectangle screenRect(0, 0, ofGetWidth(), ofGetHeight()/2);
+                    ofRectangle videoRect(0, 0, videoPlayers[videoNum]->getWidth(), videoPlayers[videoNum]->getHeight());
+                    ofRectangle videoFullscreenRect = videoRect;
+                    videoFullscreenRect.scaleTo(screenRect, OF_ASPECT_RATIO_KEEP_BY_EXPANDING);
+                    videoPlayers[videoNum]->draw(0, ofGetHeight()/2, videoFullscreenRect.getWidth(), videoFullscreenRect.getHeight());
+                }
+            }
+#endif
+
+        
+        // Static data for vegetable percentage
+        ofPushMatrix();
+        ofEnableAlphaBlending();
+        ofEnableAntiAliasing();
+        ofEnableSmoothing();
+        
+        ofTranslate(0, -200);
+        ofPoint locationBK;
+        locationBK.set(imgTopPosters[0]->width/2 - 220, imgTopPosters[0]->
+                       height/2-500);
+        
+        if (isShowPercentage)
+            percentageBk.draw(locationBK, 440.066, 440.066);
+        
+        ofPoint locationLogo;
+        locationLogo.set(0,logoY);
+        if (isShowPercentage)
+            percentageBk.draw(locationBK, 440.066, 440.066);
+        logoBk.draw(locationLogo, 1080, 437); // change to 1080
+        ofRectangle bbox;
+        ofSetColor(255, 255, 255, 255);
+        int fontSize = 128;
+        if (isShowPercentage)
+            percentagefont.draw(strFruitString, fontSize*2, imgTopPosters[0]->width/2 - 150, imgTopPosters[0]->height/2-250);
+        
+        // slideshow
+        percentagefont.draw(strPosterLeft, 54, 200+70, imgTopPosters[0]->height/2-250);
+        FZLfont.drawMultiLine(strPosterLeftCh, 42, 200+30+70, imgTopPosters[0]->height/2-178);
         
         
-        //videoPlayers[i]->draw(0, 0, 900, 1400);
+        percentagefont.drawMultiLine(strPosterRight, 54, imgTopPosters[0]->width/2 + 370, imgTopPosters[0]->height/2-250);
+        FZLfont.drawMultiLine(strPosterRightCh, 42, imgTopPosters[0]->width/2 + 370+15, imgTopPosters[0]->height/2-178);
         
-        
-        //p->draw(ofMap(i++, 0, videoPlayers.size(), 0, ofGetWidth()), ofGetHeight()/2 - 108*2, 192*4, 108*4);
-        
-        // 2304x4096 sumsung tv @1
-        // 2304x8192 ofScreen
-        // 2026x3840 video
-        
-        //        cout << "w:" << w << "\n";
-        //        p->draw(0, 0);
-        //ofPopMatrix();
-        //}
+        ofDisableSmoothing();
+        ofDisableAlphaBlending();
+        ofDisableAntiAliasing();
+        ofPopMatrix();
     }
-    
-    if (imageDisplay) {
-        
-        ofRectangle screenRect(0, 0, ofGetWidth()/2, ofGetHeight()/2);
+    else if (imageDisplay) {
+       
+        ofRectangle screenRect(0, 0, ofGetWidth(), ofGetHeight());
         ofRectangle videoRect(0, 0, imgTop->width, imgTop->height);
         ofRectangle videoFullscreenRect = videoRect;
         videoFullscreenRect.scaleTo(screenRect, OF_ASPECT_RATIO_KEEP_BY_EXPANDING);
+
         
         if (imgTopPosters.size() == 1) {
             ofSetColor(255, 255, 255);  // very important, don't delete set color
             imgTopPosters[0]->draw(0, 0, imgTopPosters[0]->width, imgTopPosters[0]->height);
         }
 
-        
         if (dbgImg) {
             ofSetColor(0, 0, 255);
             imgTop->drawBounds(0, 0, imgTop->width, imgTop->height);
@@ -394,118 +746,177 @@ void ofApp::draw(){
                     // ensure first image is showing
                     //imgTopPosters[0]->draw(0, 0, imgTopPosters[0]->width, imgTopPosters[0]->height);
             
-                    if ((ofGetElapsedTimef() - initTime) > 2) {
-                        //videoPause = !videoPause;
-                        //imageDisplay = !imageDisplay;
-                        initTime = ofGetElapsedTimef();
-                        
-                        if (imgTopx && !isUpdateImg) {
-                            //ofColor(255, 0, 0, 100);
-                            int size = imgTopPosters.size(); // size limitation is 2 by design
-                            if (size > 0) {
-                                imgTopPosters[imgRotateIndex]->draw(0, 0, imgTopPosters[imgRotateIndex]->width, imgTopPosters[imgRotateIndex]->height);
-                                imgRotateIndex++;
-                                if (imgRotateIndex >= size)
-                                    imgRotateIndex = 0;
-                                
-                                //ofSleepMillis(3000);// well...
-                            }
-                            
-                            //                        for (auto i = imgTopPosters.begin(); i!= imgTopPosters.end();  ++i) {
-                            //                            //(*i)->draw(0, 0, imgTopx->width, imgTopx->height);
-                            //                            (*i)->draw(0, 0, (*i)->width, (*i)->height);
-                            //                        }
-                            //imgTopx->draw(0, 0, imgTopx->width, imgTopx->height);
-                        }
-                        else{
-                            imgTopPosters[0]->draw(0, 0, imgTopPosters[0]->width, imgTopPosters[0]->height);
-                            //imgTop->draw(0, 0, imgTop->width, imgTop->height);
-                        }
-                    }
-            
-                    ofNoFill();
-                    ofSetColor(100, 0, 100, 100);
-                    ofCircle(imgTop->width/2, imgTop->height/3+100, 400);
-                ofDisableAlphaBlending();
-                
-                //ofRectangle bbox;
+                    imgTopPosters[posterSeq]->draw(0, 0, imgTopPosters[posterSeq]->width, imgTopPosters[posterSeq]->height);
+
                 float fontSize = 300;
-                //ofTranslate(100, 2* ofGetHeight()/3);
-                //ofRotateY(50 * ofGetElapsedTimef());
-                ofSetColor(100, 0, 100, 128);
                 FZLfont.draw(strPoster, fontSize, imgTop->width/2-100+0.1*x, imgTop->height/3+100+0.1*y);
-                //bbox = unicodeFont.getStringBoundingBox(strFruitPrefix, 100, 2* ofGetHeight()/3);
-                //ofSetColor(0, 200, 0);
-                //ofFill();
-                //ofRotateZ(-5);
                 ofEnableAlphaBlending();
             ofPopMatrix();
             
-            // Bottom poster
-            //ofColor(255, 255, 255);
-            //ofTranslate(0, 4096); // samgung tv
-            ofSetColor(255, 255, 255); // very important, don't delete set color
-            ofTranslate(0, 7680/2); // pptv
-            imgBottom->draw(0, 0, imgBottom->width, imgBottom->height);
         }
     }
-    
-    ofDrawBitmapStringHighlight("FPS: " + ofToString(fps), 20, 360);
-    ofDrawBitmapStringHighlight("Frame " + ofToString(videoPlayers[i]->getCurrentFrame()) + "/" + ofToString(videoPlayers[i]->getTotalNumFrames()), 20, 380);
-    ofDrawBitmapStringHighlight("Duration " + ofToString(videoPlayers[i]->getPosition() * videoPlayers[i]->getDuration(), 2) + "/" + ofToString(videoPlayers[0]->getDuration(), 2), 20, 400);
-    ofDrawBitmapStringHighlight("Speed " + ofToString(videoPlayers[i]->getSpeed(), 2), 20, 420);
-    ofDrawBitmapStringHighlight("Canvas W:" + ofToString(ofGetWidth()) + " H:" + ofToString(ofGetHeight()), 20, 440);
-
-    ofDrawBitmapString("Total Loop #" + ofToString(loopCounter) + " \nClip #" + ofToString(i), 20, 460);
-    
-    // send out frame number information
-    msgSend.setAddress("/sync/play/FW_SH_02_HBD_A/currentFrame");
-    msgSend.addIntArg(videoPlayers[i]->getCurrentFrame());
-    oscSender.sendMessage(msgSend);
-    
-    
-    
-#if 0
-#if 0
-    ofPushMatrix();
-    ofRectangle bbox;
-    ofSetColor(255, 0, 0, 32);
-    float fontSize = 20 /*134*/;
-    //TIME_SAMPLE_START("bbox");
-    //ofTranslate(100, 2* ofGetHeight()/3);
-    bbox = unicodeFont.getBBox(strFruitString, fontSize, 500, 500);
-    //TIME_SAMPLE_STOP("bbox");
-    ofRect(bbox);
-    ofPopMatrix();
-#endif
-
-    ofPushMatrix();
-        ofRectangle bbox;
-        float fontSize = 134;
-        //ofTranslate(100, 2* ofGetHeight()/3);
-        //ofRotateY(50 * ofGetElapsedTimef());
-        ofSetColor(0xd3, 0xd3, 0xd3, 200);
-        unicodeFont.draw(strFruitString, fontSize, 100, 2* ofGetHeight()/3);
-        bbox = unicodeFont.getStringBoundingBox(strFruitPrefix, 100, 2* ofGetHeight()/3);
-        ofSetColor(0, 200, 0);
-        //ofFill();
+    else if (isSlideShow) {
+        if (timePeriod == 0)
+            slideshow.draw();
+        else if (timePeriod == 1)
+            slideshowAfternoon.draw();
+        else if (timePeriod == 2)
+            slideshowNight.draw();
+        
+        // Static data for vegetable percentage
+        ofPushMatrix();
         ofEnableAlphaBlending();
-        ofRect(bbox);
-        //ofRotateZ(-5);
-    ofPopMatrix();
+        ofEnableAntiAliasing();
+        ofEnableSmoothing();
+        
+        ofTranslate(0, -200);
+        ofPoint locationBK;
+        locationBK.set(imgTopPosters[0]->width/2 - 220, imgTopPosters[0]->
+                       height/2-500);
+        ofPoint locationLogo;
+        locationLogo.set(0,logoY);
+        
+        if (isShowPercentage)
+            percentageBk.draw(locationBK, 440.066, 440.066);
+        logoBk.draw(locationLogo, 1080, 437);
+        ofRectangle bbox;
+        ofSetColor(255, 255, 255, 255);
+        int fontSize = 128;
+        if (isShowPercentage)
+            percentagefont.draw(strFruitString, fontSize*2, imgTopPosters[0]->width/2 - 150, imgTopPosters[0]->height/2-250);
+        
+        // slideshow
+        percentagefont.draw(strPosterLeft, 54, 200+70, imgTopPosters[0]->height/2-250);
+        FZLfont.drawMultiLine(strPosterLeftCh, 42, 200+30+70, imgTopPosters[0]->height/2-178);
+        
+        
+        percentagefont.drawMultiLine(strPosterRight, 54, imgTopPosters[0]->width/2 + 370, imgTopPosters[0]->height/2-250);
+        FZLfont.drawMultiLine(strPosterRightCh, 42, imgTopPosters[0]->width/2 + 370+15, imgTopPosters[0]->height/2-178);
+        
+        ofDisableSmoothing();
+        ofDisableAlphaBlending();
+        ofDisableAntiAliasing();
+        ofPopMatrix();
+
+    }
+    else if (isHybrid) {
+        
+        
+        // for 2 1080 x 1920 videos
+        //---------------------------------------------------------- draw video texture to fullscreen.
+        
+//        for (int videoNum = 0; videoNum < videoPlayers.size(); videoNum++) {
+//            if (videoNum == 1) { //top
+//                ofRectangle screenRect(0, 0, ofGetWidth(), ofGetHeight()/2);
+//                ofRectangle videoRect(0, 0, videoPlayers[videoNum]->getWidth(), videoPlayers[videoNum]->getHeight());
+//                ofRectangle videoFullscreenRect = videoRect;
+//                videoFullscreenRect.scaleTo(screenRect, OF_ASPECT_RATIO_KEEP_BY_EXPANDING);
+//                videoPlayers[videoNum]->draw(0, 0, videoFullscreenRect.getWidth(), videoFullscreenRect.getHeight());
+//            }
+//            else if (videoNum == 0) { //bottom
+//                ofRectangle screenRect(0, 0, ofGetWidth(), ofGetHeight()/2);
+//                ofRectangle videoRect(0, 0, videoPlayers[videoNum]->getWidth(), videoPlayers[videoNum]->getHeight());
+//                ofRectangle videoFullscreenRect = videoRect;
+//                videoFullscreenRect.scaleTo(screenRect, OF_ASPECT_RATIO_KEEP_BY_EXPANDING);
+//                videoPlayers[videoNum]->draw(0, ofGetHeight()/2, videoFullscreenRect.getWidth(), videoFullscreenRect.getHeight());
+//            }
+//        }
+        
+      
+        
+        
+        // draw video
+        ofRectangle screenRect(0, 0, ofGetWidth(), ofGetHeight()/2);
+        ofRectangle videoRect(0, 0, videoPlayers[hybridVideoNum]->getWidth(), videoPlayers[hybridVideoNum]->getHeight());
+        ofRectangle videoFullscreenRect = videoRect;
+        videoFullscreenRect.scaleTo(screenRect, OF_ASPECT_RATIO_KEEP_BY_EXPANDING);
+        videoPlayers[hybridVideoNum]->draw(0, 0, videoFullscreenRect.getWidth(), videoFullscreenRect.getHeight());
+        //cout << "hybrid: video num: " << hybridVideoNum;
     
-    // text background
-    ofSetColor(153, 153, 153, 100);
-    ofRect(100, 2* ofGetHeight()/3 - 130, ofGetWidth()-100, 160);
-    
-    if (isDemoMode) {
-        if ((ofGetElapsedTimef() - initTimeDbg) > 3.0) {
-            videoPause = !videoPause;
-            imageDisplay = !imageDisplay;
-            initTimeDbg = ofGetElapsedTimef();
+        
+        /// setup image
+        
+//        ofRectangle screenRect(0, 0, ofGetWidth(), ofGetHeight());
+//        ofRectangle videoRect(0, 0, imgTop->width, imgTop->height);
+//        ofRectangle videoFullscreenRect = videoRect;
+//        videoFullscreenRect.scaleTo(screenRect, OF_ASPECT_RATIO_KEEP_BY_EXPANDING);
+        
+        
+        if (dbgImg) {
+            ofSetColor(0, 0, 255);
+            imgTop->drawBounds(0, 0, imgTop->width, imgTop->height);
+            imgBottom->drawBounds(0, 4096, imgBottom->width, imgBottom->height);
         }
+        else {
+            
+            ofPushMatrix();
+            ofEnableAlphaBlending();
+            ofSetColor(255, 255, 255);  // very important, don't delete set color
+            
+            // ensure first image is showing
+            //imgTopPosters[0]->draw(0, 0, imgTopPosters[0]->width, imgTopPosters[0]->height);
+            
+            imgTopHybridPosters[hybridPosterCount]->draw(0,  imgTopHybridPosters[0]->height, imgTopHybridPosters[hybridPosterCount]->width, imgTopHybridPosters[hybridPosterCount]->height);
+            
+            float fontSize = 300;
+            FZLfont.draw(strPoster, fontSize, imgHybrid->width/2-100+0.1*x, imgHybrid->height-100+0.1*y);
+            ofEnableAlphaBlending();
+            ofPopMatrix();
+            
+        }
+        
+        prevHybridSeq = hybridshowSeq;
+        
+        //////////////////////////////////////////////////////////////////////////
+        // Static data for vegetable percentage
+        ofPushMatrix();
+        ofEnableAlphaBlending();
+        ofEnableAntiAliasing();
+        ofEnableSmoothing();
+        
+        ofTranslate(0, -200);
+        ofPoint locationBK;
+        locationBK.set(imgTopHybridPosters[0]->width/2 -140, imgTopHybridPosters[0]->height-220);
+        if (isShowPercentage)
+            percentageBk.draw(locationBK, percentageBk.width*0.7, percentageBk.height*0.7);
+        ofPoint locationLogo;
+        locationLogo.set(0,logoY);
+        logoBk.draw(locationLogo, 1080, 437);
+        ofRectangle bbox;
+        ofSetColor(255, 255, 255, 255);
+        int fontSize = 200;
+        if (isShowPercentage)
+            percentagefont.draw(strFruitString, fontSize, imgTopHybridPosters[0]->width/2 - 100, imgTopHybridPosters[0]->height-50);
+        
+        percentagefont.draw(strPosterLeft, 30, 100, imgTopHybridPosters[0]->height-50);
+        FZLfont.drawMultiLine(strPosterLeftCh, 28, 100, imgTopHybridPosters[0]->height-18);
+        
+        percentagefont.drawMultiLine(strPosterRight, 30, imgTopHybridPosters[0]->width/2 + 220, imgTopHybridPosters[0]->height -50);
+        FZLfont.drawMultiLine(strPosterRightCh, 24, imgTopHybridPosters[0]->width/2 + 220+15, imgTopHybridPosters[0]->height -18);
+
+        
+        ofDisableSmoothing();
+        ofDisableAlphaBlending();
+        ofDisableAntiAliasing();
+        ofPopMatrix();
+
+    }
+
+    if (isDebugMode) {
+        
+        if (isHybrid)
+            i = hybridVideoNum;
+        ofDrawBitmapStringHighlight("FPS: " + ofToString(fps), 20, 360);
+        ofDrawBitmapStringHighlight("Frame " + ofToString(videoPlayers[i]->getCurrentFrame()) + "/" + ofToString(videoPlayers[i]->getTotalNumFrames()), 20, 400);
+        ofDrawBitmapStringHighlight("Duration " + ofToString(videoPlayers[i]->getPosition() * videoPlayers[i]->getDuration(), 2) + "/" + ofToString(videoPlayers[0]->getDuration(), 2), 20, 440);
+        ofDrawBitmapStringHighlight("Speed " + ofToString(videoPlayers[i]->getSpeed(), 2), 20, 480);
+        ofDrawBitmapStringHighlight("Canvas W:" + ofToString(ofGetWidth()) + " H:" + ofToString(ofGetHeight()), 20, 520);
+        ofDrawBitmapStringHighlight("Clip #" + ofToString(i), 20, 560);
     }
     
+    
+
+#if 0
     if (isDownloadImg){
         isDownloadImg = !isDownloadImg;
        
@@ -541,6 +952,11 @@ void ofApp::draw(){
     }
 #endif
     
+    if (isShowCursor)
+        ofShowCursor();
+    else
+        ofHideCursor();
+    
 }
 
 void ofApp::urlResponse(ofHttpResponse & response) {
@@ -560,21 +976,14 @@ void ofApp::exit() {
 //--------------------------------------------------------------
 void ofApp::keyPressed(int key){
     
+    int moveFrame = 0;
+    
     switch(key) {
-        case 'I':
-            videoPause = !videoPause;
-            imageDisplay = !imageDisplay;
+        case 'z':
+            isShowCursor = !isShowCursor;
             break;
-        case 'D':
-            isDemoMode = !isDemoMode;
-            break;
-        // reserved debug option 1-0
-        case '1':
-            dbgImg = !dbgImg;
-            break;
-        case 'p':
-            isDownloadImg = !isDownloadImg;
-            //isUpdateImg = !isUpdateImg;
+        case 'd': // debug mode
+            isDebugMode = !isDebugMode;
             break;
     }
 }
@@ -605,19 +1014,7 @@ void ofApp::keyReleased(int key){
 //--------------------------------------------------------------
 void ofApp::mouseMoved(int x, int y ){
     
-//    currentFrameA = x;
-//    currentFrameB = y;
-//    
-//    ofxOscMessage msgfromA;
-//    ofxOscMessage msgfromB;
-//    msgfromA.setAddress("/sync/A/currentFrame");
-//    msgfromB.setAddress("/sync/B/currentFrame");
-//    
-//    msgfromA.addIntArg(currentFrameA);
-//    msgfromB.addIntArg(currentFrameB);
-//    
-//    oscSender.sendMessage(msgfromA);
-//    oscSender.sendMessage(msgfromB);
+
 
 }
 

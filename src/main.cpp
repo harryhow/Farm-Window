@@ -2,6 +2,7 @@
 #include "ofApp.h"
 //#include "ofAppGlutWindow.h"
 #include "ofAppGLFWWindow.h" // multiwindow
+//#include "ofGLProgrammableRenderer.h"
 
 //========================================================================
 int main( ){
@@ -13,15 +14,16 @@ int main( ){
 //	ofRunApp(new ofApp());
     
     //ofAppGlutWindow window;
+    ofSetLogLevel(OF_LOG_VERBOSE);
   
 // +++ for multiwinow
     ofAppGLFWWindow window;
     window.setMultiDisplayFullscreen(true);
-    ofSetupOpenGL(&window, 2160, 7680, OF_FULLSCREEN);
+//    ofSetCurrentRenderer(ofGLProgrammableRenderer::TYPE);
+    ofSetupOpenGL(&window, 800, 600, OF_FULLSCREEN);
 // ----
     
     //ofSetFullscreen(true);
-
     ofRunApp(new ofApp());
 
 
