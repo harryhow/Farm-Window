@@ -54,7 +54,7 @@ class ofApp : public ofBaseApp{
     
         int fps;
         // remote UI
-        string currentAppleAmount;
+        int currentAppleAmount;
         string unloadTest;
         MenuItems menu;
         ofxGiantImage *imgTopx;
@@ -123,7 +123,7 @@ class ofApp : public ofBaseApp{
         int slideshowSeq;
         int hybridshowSeq;
         int countOne, countTwo, countThree;
-        int logoX, logoY;
+        int logoX, logoY, percentageX;
         bool isShowPercentage;
     
     

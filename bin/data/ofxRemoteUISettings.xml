@@ -1,16 +1,21 @@
 <OFX_REMOTE_UI>
 	<OFX_REMOTE_UI_V>2</OFX_REMOTE_UI_V>
 	<OFX_REMOTE_UI_PARAMS>
-		<P name="Default Group" type="group"/>
-		<!-- # Default Group ############################ -->
-		<P name="logoY" type="int">200</P>
-		<P name="UPDATE VEGETABLE %" type="group"/>
-		<!-- # UPDATE VEGETABLE % ############################ -->
-		<P name="currentAppleAmount" type="string">88</P>
+		<P name="Vegetable Percentage" type="group"/>
+		<!-- # Vegetable Percentage ############################ -->
+		<P name="currentAppleAmount" type="int">68</P>
+		<P name="percentageX" type="int">432</P>
 		<P name="isShowPercentage" type="bool">1</P>
+		<P name="Maintenance Option" type="group"/>
+		<!-- # Maintenance Option ############################ -->
+		<P name="logoY" type="int">200</P>
 		<!--                                                                                 -->
 		<!-- ############################## DISABLED PARAMS ################################# -->
 		<!--                                                                                 -->
+		<P disabled="1" name="Default Group" type="group"/>
+		<!-- # Default Group ############################ -->
+		<P disabled="1" name="UPDATE VEGETABLE %" type="group"/>
+		<!-- # UPDATE VEGETABLE % ############################ -->
 		<P disabled="1" name="UPDATE VEGETABLE % HERE" type="group"/>
 		<!-- # UPDATE VEGETABLE % HERE ############################ -->
 		<P disabled="1" name="isDemoMode" type="bool">0</P>

@@ -70,7 +70,7 @@ void ofApp::InitRemoteControlUI() {
 //    RUI_SHARE_PARAM(strPoster, ofColor(255,0,0,64));	// you can also set a color on a per-param basis
     //Expose x and y vars to the server, providing a valid slider range
     //RUI_SHARE_PARAM(logoX, 0, ofGetWidth());
-    RUI_SHARE_PARAM(logoY, 0, ofGetHeight());
+
 //
 //    strUpdateFileDate = "";
 //    RUI_SHARE_PARAM(strUpdateFileDate);
@@ -80,15 +80,21 @@ void ofApp::InitRemoteControlUI() {
     
     
     // SET PARAM GROUPS / COLORS //////////////////////////////////
-    RUI_NEW_GROUP("UPDATE VEGETABLE %");	//make a new group (optional)
+    RUI_NEW_GROUP("Vegetable Percentage");	//make a new group (optional)
     
     strFruitPrefix = "";
     strUnit = "%";
-    currentAppleAmount = "65";
-    RUI_SHARE_PARAM(currentAppleAmount, ofColor(255,0,0,64));	// you can also set a color on a per-param basis
+    currentAppleAmount = 65;
+    RUI_SHARE_PARAM(currentAppleAmount, 0, 100);	// you can also set a color on a per-param basis
+    RUI_SHARE_PARAM(percentageX, 0, ofGetWidth());	// you can also set a color on a per-param basis
+    
     
     // SHARE A BOOL PARAM ////////////////////////////////////////
     RUI_SHARE_PARAM(isShowPercentage);
+    
+    
+    RUI_NEW_GROUP("Maintenance Option");	//make a new group (optional)
+    RUI_SHARE_PARAM(logoY, 0, ofGetHeight());
     
     
     // SHARE A string PARAM to unload it later;
@@ -142,6 +148,9 @@ void ofApp::setup(){
 
     PreloadAsset();
     
+    // percentage value x coordination, x=1080px so doesn't matter if cross screen or not
+    percentageX = imgTopPosters[0]->width/2 - 100;
+
     
     // enable trace to file
     ofLogToFile("FW_SH_02_HBD_A_LOG.txt", true);
@@ -617,7 +626,9 @@ void ofApp::draw(){
     /////////////////////////////////////
     
 
-    
+//    char s[5];
+//    sprintf(s, "%3d", currentAppleAmount);
+ 
     strFruitString =  ofToString(currentAppleAmount) + strUnit;
     
     if (!canIStart)
@@ -689,30 +700,25 @@ void ofApp::draw(){
         
         ofTranslate(0, -200);
         ofPoint locationBK;
-        locationBK.set(imgTopPosters[0]->width/2 - 220, imgTopPosters[0]->
-                       height/2-500);
-        
+        locationBK.set(imgTopPosters[0]->width/2 -140, imgTopPosters[0]->height/2-220);
         if (isShowPercentage)
-            percentageBk.draw(locationBK, 440.066, 440.066);
+            percentageBk.draw(locationBK, percentageBk.width*0.7, percentageBk.height*0.7);
         
         ofPoint locationLogo;
         locationLogo.set(0,logoY);
-        if (isShowPercentage)
-            percentageBk.draw(locationBK, 440.066, 440.066);
         logoBk.draw(locationLogo, 1080, 437); // change to 1080
         ofRectangle bbox;
         ofSetColor(255, 255, 255, 255);
-        int fontSize = 128;
+        int fontSize = 200;
+        //percentageX = imgTopPosters[0]->width/2 - 100;
         if (isShowPercentage)
-            percentagefont.draw(strFruitString, fontSize*2, imgTopPosters[0]->width/2 - 150, imgTopPosters[0]->height/2-250);
+            percentagefont.draw(strFruitString, fontSize, percentageX, imgTopPosters[0]->height/2-50);
         
-        // slideshow
-        percentagefont.draw(strPosterLeft, 54, 200+70, imgTopPosters[0]->height/2-250);
-        FZLfont.drawMultiLine(strPosterLeftCh, 42, 200+30+70, imgTopPosters[0]->height/2-178);
+        percentagefont.draw(strPosterLeft, 30, 100, imgTopPosters[0]->height/2-50);
+        FZLfont.drawMultiLine(strPosterLeftCh, 28, 100, imgTopPosters[0]->height/2-18);
         
-        
-        percentagefont.drawMultiLine(strPosterRight, 54, imgTopPosters[0]->width/2 + 370, imgTopPosters[0]->height/2-250);
-        FZLfont.drawMultiLine(strPosterRightCh, 42, imgTopPosters[0]->width/2 + 370+15, imgTopPosters[0]->height/2-178);
+        percentagefont.drawMultiLine(strPosterRight, 30, imgTopPosters[0]->width/2 + 220, imgTopPosters[0]->height/2 -50);
+        FZLfont.drawMultiLine(strPosterRightCh, 24, imgTopPosters[0]->width/2 + 220+15, imgTopPosters[0]->height/2 -18);
         
         ofDisableSmoothing();
         ofDisableAlphaBlending();
@@ -771,60 +777,32 @@ void ofApp::draw(){
         
         ofTranslate(0, -200);
         ofPoint locationBK;
-        locationBK.set(imgTopPosters[0]->width/2 - 220, imgTopPosters[0]->
-                       height/2-500);
+        locationBK.set(imgTopPosters[0]->width/2 -140, imgTopPosters[0]->height/2-220);
+        if (isShowPercentage)
+            percentageBk.draw(locationBK, percentageBk.width*0.7, percentageBk.height*0.7);
         ofPoint locationLogo;
         locationLogo.set(0,logoY);
-        
-        if (isShowPercentage)
-            percentageBk.draw(locationBK, 440.066, 440.066);
         logoBk.draw(locationLogo, 1080, 437);
         ofRectangle bbox;
         ofSetColor(255, 255, 255, 255);
-        int fontSize = 128;
+        
+        int fontSize = 200;
+        //percentageX = imgTopHybridPosters[0]->width/2 - 100;
         if (isShowPercentage)
-            percentagefont.draw(strFruitString, fontSize*2, imgTopPosters[0]->width/2 - 150, imgTopPosters[0]->height/2-250);
+            percentagefont.draw(strFruitString, fontSize, percentageX, imgTopPosters[0]->height/2-50);
         
-        // slideshow
-        percentagefont.draw(strPosterLeft, 54, 200+70, imgTopPosters[0]->height/2-250);
-        FZLfont.drawMultiLine(strPosterLeftCh, 42, 200+30+70, imgTopPosters[0]->height/2-178);
+        percentagefont.draw(strPosterLeft, 30, 100, imgTopPosters[0]->height/2-50);
+        FZLfont.drawMultiLine(strPosterLeftCh, 28, 100, imgTopPosters[0]->height/2-18);
         
-        
-        percentagefont.drawMultiLine(strPosterRight, 54, imgTopPosters[0]->width/2 + 370, imgTopPosters[0]->height/2-250);
-        FZLfont.drawMultiLine(strPosterRightCh, 42, imgTopPosters[0]->width/2 + 370+15, imgTopPosters[0]->height/2-178);
+        percentagefont.drawMultiLine(strPosterRight, 30, imgTopPosters[0]->width/2 + 220, imgTopPosters[0]->height/2 -50);
+        FZLfont.drawMultiLine(strPosterRightCh, 24, imgTopPosters[0]->width/2 + 220+15, imgTopPosters[0]->height/2 -18);
         
         ofDisableSmoothing();
         ofDisableAlphaBlending();
         ofDisableAntiAliasing();
         ofPopMatrix();
-
     }
     else if (isHybrid) {
-        
-        
-        // for 2 1080 x 1920 videos
-        //---------------------------------------------------------- draw video texture to fullscreen.
-        
-//        for (int videoNum = 0; videoNum < videoPlayers.size(); videoNum++) {
-//            if (videoNum == 1) { //top
-//                ofRectangle screenRect(0, 0, ofGetWidth(), ofGetHeight()/2);
-//                ofRectangle videoRect(0, 0, videoPlayers[videoNum]->getWidth(), videoPlayers[videoNum]->getHeight());
-//                ofRectangle videoFullscreenRect = videoRect;
-//                videoFullscreenRect.scaleTo(screenRect, OF_ASPECT_RATIO_KEEP_BY_EXPANDING);
-//                videoPlayers[videoNum]->draw(0, 0, videoFullscreenRect.getWidth(), videoFullscreenRect.getHeight());
-//            }
-//            else if (videoNum == 0) { //bottom
-//                ofRectangle screenRect(0, 0, ofGetWidth(), ofGetHeight()/2);
-//                ofRectangle videoRect(0, 0, videoPlayers[videoNum]->getWidth(), videoPlayers[videoNum]->getHeight());
-//                ofRectangle videoFullscreenRect = videoRect;
-//                videoFullscreenRect.scaleTo(screenRect, OF_ASPECT_RATIO_KEEP_BY_EXPANDING);
-//                videoPlayers[videoNum]->draw(0, ofGetHeight()/2, videoFullscreenRect.getWidth(), videoFullscreenRect.getHeight());
-//            }
-//        }
-        
-      
-        
-        
         // draw video
         ofRectangle screenRect(0, 0, ofGetWidth(), ofGetHeight()/2);
         ofRectangle videoRect(0, 0, videoPlayers[hybridVideoNum]->getWidth(), videoPlayers[hybridVideoNum]->getHeight());
@@ -833,14 +811,6 @@ void ofApp::draw(){
         videoPlayers[hybridVideoNum]->draw(0, 0, videoFullscreenRect.getWidth(), videoFullscreenRect.getHeight());
         //cout << "hybrid: video num: " << hybridVideoNum;
     
-        
-        /// setup image
-        
-//        ofRectangle screenRect(0, 0, ofGetWidth(), ofGetHeight());
-//        ofRectangle videoRect(0, 0, imgTop->width, imgTop->height);
-//        ofRectangle videoFullscreenRect = videoRect;
-//        videoFullscreenRect.scaleTo(screenRect, OF_ASPECT_RATIO_KEEP_BY_EXPANDING);
-        
         
         if (dbgImg) {
             ofSetColor(0, 0, 255);
@@ -885,8 +855,9 @@ void ofApp::draw(){
         ofRectangle bbox;
         ofSetColor(255, 255, 255, 255);
         int fontSize = 200;
+        //percentageX = imgTopHybridPosters[0]->width/2 - 100;
         if (isShowPercentage)
-            percentagefont.draw(strFruitString, fontSize, imgTopHybridPosters[0]->width/2 - 100, imgTopHybridPosters[0]->height-50);
+            percentagefont.draw(strFruitString, fontSize, percentageX, imgTopHybridPosters[0]->height-50);
         
         percentagefont.draw(strPosterLeft, 30, 100, imgTopHybridPosters[0]->height-50);
         FZLfont.drawMultiLine(strPosterLeftCh, 28, 100, imgTopHybridPosters[0]->height-18);
