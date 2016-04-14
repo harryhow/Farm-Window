@@ -25,6 +25,12 @@ class ofApp : public ofBaseApp{
     enum MenuItems{
         MENU_OPTION_0, MENU_OPTION_1, MENU_OPTION_2, MENU_OPTION_3
     };
+    
+    enum Mode {
+        ONE_SINGLE=0,   // cross screen single video + poster
+        TWO_SLIDESHOW,   // slideshow + poster
+        THREE_HYBRID  // single video + poster
+    };
      
     
    	public:
@@ -150,4 +156,6 @@ class ofApp : public ofBaseApp{
         int  hybridPosterCount;
         int  prevHybridSeq;
         int  hybridVideoNum;
+        Mode lastMode;
+        Mode currentMode;
 };

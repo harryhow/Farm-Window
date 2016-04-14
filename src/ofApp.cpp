@@ -95,7 +95,7 @@ void ofApp::InitRemoteControlUI() {
     
     RUI_NEW_GROUP("Maintenance Option");	//make a new group (optional)
     RUI_SHARE_PARAM(logoY, 0, ofGetHeight());
-    RUI_SHARE_PARAM(oscIP);
+    //RUI_SHARE_PARAM(oscIP);
     
     
     // SHARE A string PARAM to unload it later;
@@ -247,14 +247,15 @@ void ofApp::setup(){
  
     // OSC
     // TODO: need more tests on this
-    oscIP = "\"" + oscIP + "\"";
-    if (oscIP.length() > 7) {
-        oscSender.setup(oscIP, SENDPORT);
-        cout << "oscIP:" << oscIP << "\r\n";
-    }
-    else
-        oscSender.setup(HOST, SENDPORT);
+//    oscIP = "\"" + oscIP + "\"";
+//    if (oscIP.length() > 7) {
+//        oscSender.setup(oscIP, SENDPORT);
+//        cout << "oscIP:" << oscIP << "\r\n";
+//    }
+//    else
+//        oscSender.setup(HOST, SENDPORT);
 
+    oscSender.setup(HOST, SENDPORT);
     oscReceiver.setup(RECVPORT);
     
     // send ready
@@ -359,10 +360,11 @@ void ofApp::PreloadAsset() {
 
 void ofApp::LoadCurrentVideo(int timePeriod) {
     
-    if (timePeriod == previousPeriod)
+
+    
+    if ((timePeriod == previousPeriod) && (lastMode == currentMode))
         return;
-    
-    
+
     if (timePeriod == 0) {
         
         videoPlayers.push_back(new ofxAVFVideoPlayer());
@@ -423,9 +425,8 @@ void ofApp::LoadCurrentVideo(int timePeriod) {
             videoPlayers[2]->setLoopState(OF_LOOP_NORMAL);
             isHybridVideoLoaded = true;
         }
-        
     }
-   }
+}
 
 
 //void ofApp::LoadCurrentSlideshows(int timePeriod) {
@@ -518,6 +519,7 @@ void ofApp::draw(){
         ofxOscMessage m;
         oscReceiver.getNextMessage(&m);
         
+        // TOFIX: not use
         if (m.getAddress() == "/sync/play/FW_SH_02_HBD_A/frameJump") {
             frameJump = m.getArgAsInt32(0);
             cout << "Frame sync, jump(" << frameJump << ") frames\r\n";
@@ -538,6 +540,7 @@ void ofApp::draw(){
             cout << "[POSTER SYNC INFO] " << ofGetTimestampString() << "time:" << timePeriod << ", seq#" << posterSeq << "\r\n";
             canIStart = true;
             isHybridVideoLoaded = false;
+            currentMode = ONE_SINGLE;
             
         }
         else if (m.getAddress() == "/sync/start/nowPlayingInfo/video") {
@@ -552,9 +555,7 @@ void ofApp::draw(){
             videoSeq = m.getArgAsInt32(1);
             cellKickTime = m.getArgAsInt32(2);
             
-            //preload video
-            LoadCurrentVideo(timePeriod);
-
+           
             
             if (cellKickTime > previousCellKickTime)
                 isCellStart = true;
@@ -565,6 +566,10 @@ void ofApp::draw(){
             
             // add canIstart here
             canIStart = true;
+            currentMode = ONE_SINGLE;
+            //preload video
+            LoadCurrentVideo(timePeriod);
+
             
             cout << "[VIDEO SYNC INFO]" << ofGetTimestampString() << " time:" << timePeriod << ", seq#" << videoSeq << ", kick:" << cellKickTime << "\r\n";
         }
@@ -593,6 +598,7 @@ void ofApp::draw(){
             
             //LoadCurrentSlideshows(timePeriod);
             previousPeriod = timePeriod;
+            currentMode = TWO_SLIDESHOW;
             
         }
         else if (m.getAddress() == "/sync/start/nowPlayingInfo/hybrid") {
@@ -604,11 +610,9 @@ void ofApp::draw(){
             timePeriod = m.getArgAsInt32(0);
             hybridshowSeq = m.getArgAsInt32(1);
             cellKickTime = m.getArgAsInt32(2);
-
             
             if (cellKickTime > previousCellKickTime)
                 isCellStart = true;
-
             
             cout << "[HYBRID SYNC INFO] " << ofGetTimestampString() << "time:" << timePeriod << ", seq#" << hybridshowSeq << "\r\n";
             hybridVideoNum = hybridshowSeq;
@@ -620,12 +624,12 @@ void ofApp::draw(){
                 videoPlayers[hybridVideoNum]->setPosition(0.0);
             }
             
-
             
-            LoadCurrentVideo(ALL_DAY);
             previousPeriod = timePeriod; //TODO: this is potential issue
             canIStart = true;
-        }
+            currentMode = THREE_HYBRID;
+            LoadCurrentVideo(ALL_DAY);
+         }
         //dumpOSC(m);
     }
     
@@ -734,6 +738,7 @@ void ofApp::draw(){
         ofDisableAlphaBlending();
         ofDisableAntiAliasing();
         ofPopMatrix();
+        lastMode = ONE_SINGLE;
     }
     else if (imageDisplay) {
        
@@ -770,6 +775,7 @@ void ofApp::draw(){
             ofPopMatrix();
             
         }
+        lastMode = ONE_SINGLE;
     }
     else if (isSlideShow) {
         if (timePeriod == 0)
@@ -811,6 +817,7 @@ void ofApp::draw(){
         ofDisableAlphaBlending();
         ofDisableAntiAliasing();
         ofPopMatrix();
+        lastMode = TWO_SLIDESHOW;
     }
     else if (isHybrid) {
         // draw video
@@ -880,6 +887,8 @@ void ofApp::draw(){
         ofDisableAlphaBlending();
         ofDisableAntiAliasing();
         ofPopMatrix();
+        
+        lastMode = THREE_HYBRID;
 
     }
 

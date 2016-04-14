@@ -9,10 +9,10 @@
 		<P name="Maintenance Option" type="group"/>
 		<!-- # Maintenance Option ############################ -->
 		<P name="logoY" type="int">200</P>
-		<P name="oscIP" type="string">&quot;&quot;0&quot;&quot;</P>
 		<!--                                                                                 -->
 		<!-- ############################## DISABLED PARAMS ################################# -->
 		<!--                                                                                 -->
+		<P disabled="1" name="oscIP" type="string">&quot;&quot;&quot;&quot;0&quot;&quot;&quot;&quot;</P>
 		<P disabled="1" name="Default Group" type="group"/>
 		<!-- # Default Group ############################ -->
 		<P disabled="1" name="UPDATE VEGETABLE %" type="group"/>
