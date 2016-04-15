@@ -1,5 +1,5 @@
 /***
- * PROJECT FARM WINDOW - MACHINE A
+ * PROJECT FARM WINDOW - MACHINE C
  *              ____                                    ,--,                 ,--.
  *            ,'  , `.   ,---,         ,----..        ,--.'|   ,---,       ,--.'|    ,---,.                         ,---,
  *         ,-+-,.' _ |  '  .' \       /   /   \    ,--,  | :,`--.' |   ,--,:  : |  ,'  .' |                        '  .' \
@@ -154,7 +154,7 @@ void ofApp::setup(){
 
     
     // enable trace to file
-    ofLogToFile("FW_SH_02_HBD_A_LOG.txt", true);
+    ofLogToFile("FW_SH_02_HBD_C_LOG.txt", true);
     
     // initilization
     videoPause = false;
@@ -260,7 +260,7 @@ void ofApp::setup(){
     
     // send ready
     ofxOscMessage m;
-    m.setAddress("/sync/start/FW_SH_02_HBD_A");
+    m.setAddress("/sync/start/FW_SH_02_HBD_C");
     m.addStringArg("ready");
     cout << "+++ A: OSC SEND: " << ofGetTimestampString() << "\r\n";
     oscSender.sendMessage(m);
@@ -311,15 +311,15 @@ void ofApp::PreloadAsset() {
     if (timePeriod == 0) {
         
         videoPlayers.push_back(new ofxAVFVideoPlayer());
-        videoPlayers[0]->loadMovie("movies/A_M_1.mov");
+        videoPlayers[0]->loadMovie("movies/C_M_1.mov");
         videoPlayers[0]->setLoopState(OF_LOOP_NORMAL);
         
         videoPlayers.push_back(new ofxAVFVideoPlayer());
-        videoPlayers[1]->loadMovie("movies/A_M_2.mov");
+        videoPlayers[1]->loadMovie("movies/C_M_2.mov");
         videoPlayers[1]->setLoopState(OF_LOOP_NORMAL);
         
         videoPlayers.push_back(new ofxAVFVideoPlayer());
-        videoPlayers[2]->loadMovie("movies/A_M_3.mov");
+        videoPlayers[2]->loadMovie("movies/C_M_3.mov");
         videoPlayers[2]->setLoopState(OF_LOOP_NORMAL);
         
         
@@ -327,29 +327,29 @@ void ofApp::PreloadAsset() {
     else if (timePeriod == 1) {
         
         videoPlayers.push_back(new ofxAVFVideoPlayer());
-        videoPlayers[0]->loadMovie("movies/A_A_1.mov");
+        videoPlayers[0]->loadMovie("movies/C_A_1.mov");
         videoPlayers[0]->setLoopState(OF_LOOP_NORMAL);
         
         videoPlayers.push_back(new ofxAVFVideoPlayer());
-        videoPlayers[1]->loadMovie("movies/A_A_2.mov");
+        videoPlayers[1]->loadMovie("movies/C_A_2.mov");
         videoPlayers[1]->setLoopState(OF_LOOP_NORMAL);
         
         videoPlayers.push_back(new ofxAVFVideoPlayer());
-        videoPlayers[2]->loadMovie("movies/A_A_3.mov");
+        videoPlayers[2]->loadMovie("movies/C_A_3.mov");
         videoPlayers[2]->setLoopState(OF_LOOP_NORMAL);
         
     }
     else if (timePeriod == 2) {
         videoPlayers.push_back(new ofxAVFVideoPlayer());
-        videoPlayers[0]->loadMovie("movies/A_E_1.mov");
+        videoPlayers[0]->loadMovie("movies/C_E_1.mov");
         videoPlayers[0]->setLoopState(OF_LOOP_NORMAL);
         
         videoPlayers.push_back(new ofxAVFVideoPlayer());
-        videoPlayers[1]->loadMovie("movies/A_E_2.mov");
+        videoPlayers[1]->loadMovie("movies/C_E_2.mov");
         videoPlayers[1]->setLoopState(OF_LOOP_NORMAL);
         
         videoPlayers.push_back(new ofxAVFVideoPlayer());
-        videoPlayers[2]->loadMovie("movies/A_E_3.mov");
+        videoPlayers[2]->loadMovie("movies/C_E_3.mov");
         videoPlayers[2]->setLoopState(OF_LOOP_NORMAL);
         
     }
@@ -361,51 +361,57 @@ void ofApp::PreloadAsset() {
 void ofApp::LoadCurrentVideo(int timePeriod) {
     
 
-    
     if ((timePeriod == previousPeriod) && (lastMode == currentMode))
         return;
+    
+    // TOFIX: delete videoPlayers?
+//    for (int i=0; i<videoPlayers.size(); i++) {
+//        delete videoPlayers[i];
+//    }
 
+    
     if (timePeriod == 0) {
-        
+    
         videoPlayers.push_back(new ofxAVFVideoPlayer());
-        videoPlayers[0]->loadMovie("movies/A_M_1.mov");
+        videoPlayers[0]->loadMovie("movies/C_M_1.mov");
         videoPlayers[0]->setLoopState(OF_LOOP_NORMAL);
         
         videoPlayers.push_back(new ofxAVFVideoPlayer());
-        videoPlayers[1]->loadMovie("movies/A_M_2.mov");
+        videoPlayers[1]->loadMovie("movies/C_M_2.mov");
         videoPlayers[1]->setLoopState(OF_LOOP_NORMAL);
         
         videoPlayers.push_back(new ofxAVFVideoPlayer());
-        videoPlayers[2]->loadMovie("movies/A_M_3.mov");
+        videoPlayers[2]->loadMovie("movies/C_M_3.mov");
         videoPlayers[2]->setLoopState(OF_LOOP_NORMAL);
             
     }
     else if (timePeriod == 1) {
-        
+
         videoPlayers.push_back(new ofxAVFVideoPlayer());
-        videoPlayers[0]->loadMovie("movies/A_A_1.mov");
+        videoPlayers[0]->loadMovie("movies/C_A_1.mov");
         videoPlayers[0]->setLoopState(OF_LOOP_NORMAL);
         
         videoPlayers.push_back(new ofxAVFVideoPlayer());
-        videoPlayers[1]->loadMovie("movies/A_A_2.mov");
+        videoPlayers[1]->loadMovie("movies/C_A_2.mov");
         videoPlayers[1]->setLoopState(OF_LOOP_NORMAL);
         
         videoPlayers.push_back(new ofxAVFVideoPlayer());
-        videoPlayers[2]->loadMovie("movies/A_A_3.mov");
+        videoPlayers[2]->loadMovie("movies/C_A_3.mov");
         videoPlayers[2]->setLoopState(OF_LOOP_NORMAL);
     
     }
     else if (timePeriod == 2) {
+        
         videoPlayers.push_back(new ofxAVFVideoPlayer());
-        videoPlayers[0]->loadMovie("movies/A_E_1.mov");
+        videoPlayers[0]->loadMovie("movies/C_E_1.mov");
         videoPlayers[0]->setLoopState(OF_LOOP_NORMAL);
         
         videoPlayers.push_back(new ofxAVFVideoPlayer());
-        videoPlayers[1]->loadMovie("movies/A_E_2.mov");
+        videoPlayers[1]->loadMovie("movies/C_E_2.mov");
         videoPlayers[1]->setLoopState(OF_LOOP_NORMAL);
         
         videoPlayers.push_back(new ofxAVFVideoPlayer());
-        videoPlayers[2]->loadMovie("movies/A_E_3.mov");
+        videoPlayers[2]->loadMovie("movies/C_E_3.mov");
         videoPlayers[2]->setLoopState(OF_LOOP_NORMAL);
     
     }
@@ -520,7 +526,7 @@ void ofApp::draw(){
         oscReceiver.getNextMessage(&m);
         
         // TOFIX: not use
-        if (m.getAddress() == "/sync/play/FW_SH_02_HBD_A/frameJump") {
+        if (m.getAddress() == "/sync/play/FW_SH_02_HBD_C/frameJump") {
             frameJump = m.getArgAsInt32(0);
             cout << "Frame sync, jump(" << frameJump << ") frames\r\n";
             
@@ -540,7 +546,7 @@ void ofApp::draw(){
             cout << "[POSTER SYNC INFO] " << ofGetTimestampString() << "time:" << timePeriod << ", seq#" << posterSeq << "\r\n";
             canIStart = true;
             isHybridVideoLoaded = false;
-            currentMode = ONE_SINGLE;
+            //currentMode = ONE_SINGLE;
             
         }
         else if (m.getAddress() == "/sync/start/nowPlayingInfo/video") {
@@ -562,22 +568,23 @@ void ofApp::draw(){
 
 
             i = videoSeq + 0;
-            previousPeriod = timePeriod;
             
             // add canIstart here
             canIStart = true;
             currentMode = ONE_SINGLE;
             //preload video
             LoadCurrentVideo(timePeriod);
+            previousPeriod = timePeriod;
+
 
             
             cout << "[VIDEO SYNC INFO]" << ofGetTimestampString() << " time:" << timePeriod << ", seq#" << videoSeq << ", kick:" << cellKickTime << "\r\n";
         }
-        else if (m.getAddress() == "/sync/start/FW_SH_02_HBD_A/RUTHERE") {
+        else if (m.getAddress() == "/sync/start/FW_SH_02_HBD_C/RUTHERE") {
             // send ready
             cout << "Yes, I'm here..." << "\r\n";
             ofxOscMessage m;
-            m.setAddress("/sync/start/FW_SH_02_HBD_A");
+            m.setAddress("/sync/start/FW_SH_02_HBD_C");
             m.addStringArg("ready");
             //cout << "+++ A: OSC SEND: " << ofGetTimestampString() << "\r\n";
             oscSender.sendMessage(m);
@@ -625,11 +632,12 @@ void ofApp::draw(){
             }
             
             
-            previousPeriod = timePeriod; //TODO: this is potential issue
+           
             canIStart = true;
             currentMode = THREE_HYBRID;
             LoadCurrentVideo(ALL_DAY);
-         }
+            previousPeriod = timePeriod; //TODO: this is potential issue
+        }
         //dumpOSC(m);
     }
     
