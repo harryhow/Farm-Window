@@ -1,5 +1,5 @@
 /***
- * PROJECT FARM WINDOW - MACHINE C
+ * PROJECT FARM WINDOW - MACHINE A
  *              ____                                    ,--,                 ,--.
  *            ,'  , `.   ,---,         ,----..        ,--.'|   ,---,       ,--.'|    ,---,.                         ,---,
  *         ,-+-,.' _ |  '  .' \       /   /   \    ,--,  | :,`--.' |   ,--,:  : |  ,'  .' |                        '  .' \
@@ -20,7 +20,7 @@
 
 
 #include "ofApp.h"
-#
+//#include <memory>
 #ifndef USE_REMOTE_CONTROL
 #define USE_REMOTE_CONTROL
 #endif
@@ -28,8 +28,6 @@
 #ifndef USE_VIDEO_SYNC
 #define USE_VIDEO_SYNC
 #endif
-
-
 
 float x;
 int y;
@@ -151,10 +149,9 @@ void ofApp::setup(){
     
     // percentage value x coordination, x=1080px so doesn't matter if cross screen or not
     percentageX = imgTopPosters[0]->width/2 - 100;
-
     
     // enable trace to file
-    ofLogToFile("FW_SH_02_HBD_C_LOG.txt", true);
+    ofLogToFile("FW_SH_02_HBD_A_LOG.txt", true);
     
     // initilization
     videoPause = false;
@@ -178,7 +175,6 @@ void ofApp::setup(){
     
     // remote controller
     InitRemoteControlUI();
-
 
     // load font
     unicodeFont.setup("SourceHanSansSC-Light.ttf", //font file, ttf only
@@ -216,8 +212,6 @@ void ofApp::setup(){
                      );					//lower res mipmaps wil bleed into each other
     
     
-
-
     
     strPosterLeft = (string)"SHANDONG, YANTAI";
     strPosterLeftCh = (string)"        山东烟台";
@@ -260,158 +254,133 @@ void ofApp::setup(){
     
     // send ready
     ofxOscMessage m;
-    m.setAddress("/sync/start/FW_SH_02_HBD_C");
+    m.setAddress("/sync/start/FW_SH_02_HBD_A");
     m.addStringArg("ready");
     cout << "+++ A: OSC SEND: " << ofGetTimestampString() << "\r\n";
     oscSender.sendMessage(m);
     cout << "--- A: OSC SEND: " << ofGetTimestampString() << "\r\n";
-    
-   
 }
 
 
 void ofApp::PreloadAsset() {
-
     
     ofDirectory dir;
     dir.open(ASSET_IMAGE_FOLDER);
     int numFiles = dir.listDir();
     
-    for (int i = 0; i < numFiles; ++i)
-    {
-        //cout << "Path at index [" << i << "] = " << dir.getPath(i) << endl;
-        //videoPlayers[i]->play();
-        // preload poster image
-        //imgBottom = new ofxGiantImage();
-        //imgBottom->loadImage("images/A_1_TOP_20151127.jpg"); //papaya
+    for (int i = 0; i < numFiles; ++i) {
         cout << "Preload image:(" << i << "/" << numFiles << ") " << dir.getPath(i) << "\r\n";
         imgTop = new ofxGiantImage();
         imgTop->loadImage(dir.getPath(i));
         imgTopPosters.push_back(imgTop);
     }
     
+    // 1080 x 1920 px posters
     dir.open(ASSET_HYBRID_IMAGE_FOLDER);
     numFiles = dir.listDir();
     
-    
-    for (int i = 0; i < numFiles; ++i)
-    {
-        //cout << "Path at index [" << i << "] = " << dir.getPath(i) << endl;
-        //videoPlayers[i]->play();
-        // preload poster image
-        //imgBottom = new ofxGiantImage();
-        //imgBottom->loadImage("images/A_1_TOP_20151127.jpg"); //papaya
+    for (int i = 0; i < numFiles; ++i) {
         cout << "load hybrid image:(" << i << "/" << numFiles << ") " << dir.getPath(i) << "\r\n";
         imgHybrid = new ofImage();
         imgHybrid->loadImage(dir.getPath(i));
         imgTopHybridPosters.push_back(imgHybrid);
     }
     
-    
     if (timePeriod == 0) {
-        
-        videoPlayers.push_back(new ofxAVFVideoPlayer());
-        videoPlayers[0]->loadMovie("movies/C_M_1.mov");
+        videoPlayers.push_back(new ofxAVFVideoPlayer);
+        videoPlayers[0]->loadMovie("movies/A_M_1.mov");
         videoPlayers[0]->setLoopState(OF_LOOP_NORMAL);
         
         videoPlayers.push_back(new ofxAVFVideoPlayer());
-        videoPlayers[1]->loadMovie("movies/C_M_2.mov");
+        videoPlayers[1]->loadMovie("movies/A_M_2.mov");
         videoPlayers[1]->setLoopState(OF_LOOP_NORMAL);
         
         videoPlayers.push_back(new ofxAVFVideoPlayer());
-        videoPlayers[2]->loadMovie("movies/C_M_3.mov");
+        videoPlayers[2]->loadMovie("movies/A_M_3.mov");
         videoPlayers[2]->setLoopState(OF_LOOP_NORMAL);
-        
-        
     }
     else if (timePeriod == 1) {
-        
         videoPlayers.push_back(new ofxAVFVideoPlayer());
-        videoPlayers[0]->loadMovie("movies/C_A_1.mov");
+        videoPlayers[0]->loadMovie("movies/A_A_1.mov");
         videoPlayers[0]->setLoopState(OF_LOOP_NORMAL);
         
         videoPlayers.push_back(new ofxAVFVideoPlayer());
-        videoPlayers[1]->loadMovie("movies/C_A_2.mov");
+        videoPlayers[1]->loadMovie("movies/A_A_2.mov");
         videoPlayers[1]->setLoopState(OF_LOOP_NORMAL);
         
         videoPlayers.push_back(new ofxAVFVideoPlayer());
-        videoPlayers[2]->loadMovie("movies/C_A_3.mov");
+        videoPlayers[2]->loadMovie("movies/A_A_3.mov");
         videoPlayers[2]->setLoopState(OF_LOOP_NORMAL);
-        
     }
     else if (timePeriod == 2) {
         videoPlayers.push_back(new ofxAVFVideoPlayer());
-        videoPlayers[0]->loadMovie("movies/C_E_1.mov");
+        videoPlayers[0]->loadMovie("movies/A_E_1.mov");
         videoPlayers[0]->setLoopState(OF_LOOP_NORMAL);
         
         videoPlayers.push_back(new ofxAVFVideoPlayer());
-        videoPlayers[1]->loadMovie("movies/C_E_2.mov");
+        videoPlayers[1]->loadMovie("movies/A_E_2.mov");
         videoPlayers[1]->setLoopState(OF_LOOP_NORMAL);
         
         videoPlayers.push_back(new ofxAVFVideoPlayer());
-        videoPlayers[2]->loadMovie("movies/C_E_3.mov");
+        videoPlayers[2]->loadMovie("movies/A_E_3.mov");
         videoPlayers[2]->setLoopState(OF_LOOP_NORMAL);
-        
     }
-
-    
 }
 
 
 void ofApp::LoadCurrentVideo(int timePeriod) {
     
-
     if ((timePeriod == previousPeriod) && (lastMode == currentMode))
         return;
     
-    // TOFIX: delete videoPlayers?
+// TOFIX: delete videoPlayers?
 //    for (int i=0; i<videoPlayers.size(); i++) {
 //        delete videoPlayers[i];
 //    }
 
+    //clearVideoPlayer();
     
     if (timePeriod == 0) {
-    
         videoPlayers.push_back(new ofxAVFVideoPlayer());
-        videoPlayers[0]->loadMovie("movies/C_M_1.mov");
+        videoPlayers[0]->loadMovie("movies/A_M_1.mov");
         videoPlayers[0]->setLoopState(OF_LOOP_NORMAL);
         
         videoPlayers.push_back(new ofxAVFVideoPlayer());
-        videoPlayers[1]->loadMovie("movies/C_M_2.mov");
+        videoPlayers[1]->loadMovie("movies/A_M_2.mov");
         videoPlayers[1]->setLoopState(OF_LOOP_NORMAL);
         
         videoPlayers.push_back(new ofxAVFVideoPlayer());
-        videoPlayers[2]->loadMovie("movies/C_M_3.mov");
+        videoPlayers[2]->loadMovie("movies/A_M_3.mov");
         videoPlayers[2]->setLoopState(OF_LOOP_NORMAL);
             
     }
     else if (timePeriod == 1) {
 
         videoPlayers.push_back(new ofxAVFVideoPlayer());
-        videoPlayers[0]->loadMovie("movies/C_A_1.mov");
+        videoPlayers[0]->loadMovie("movies/A_A_1.mov");
         videoPlayers[0]->setLoopState(OF_LOOP_NORMAL);
         
         videoPlayers.push_back(new ofxAVFVideoPlayer());
-        videoPlayers[1]->loadMovie("movies/C_A_2.mov");
+        videoPlayers[1]->loadMovie("movies/A_A_2.mov");
         videoPlayers[1]->setLoopState(OF_LOOP_NORMAL);
         
         videoPlayers.push_back(new ofxAVFVideoPlayer());
-        videoPlayers[2]->loadMovie("movies/C_A_3.mov");
+        videoPlayers[2]->loadMovie("movies/A_A_3.mov");
         videoPlayers[2]->setLoopState(OF_LOOP_NORMAL);
     
     }
     else if (timePeriod == 2) {
         
         videoPlayers.push_back(new ofxAVFVideoPlayer());
-        videoPlayers[0]->loadMovie("movies/C_E_1.mov");
+        videoPlayers[0]->loadMovie("movies/A_E_1.mov");
         videoPlayers[0]->setLoopState(OF_LOOP_NORMAL);
         
         videoPlayers.push_back(new ofxAVFVideoPlayer());
-        videoPlayers[1]->loadMovie("movies/C_E_2.mov");
+        videoPlayers[1]->loadMovie("movies/A_E_2.mov");
         videoPlayers[1]->setLoopState(OF_LOOP_NORMAL);
         
         videoPlayers.push_back(new ofxAVFVideoPlayer());
-        videoPlayers[2]->loadMovie("movies/C_E_3.mov");
+        videoPlayers[2]->loadMovie("movies/A_E_3.mov");
         videoPlayers[2]->setLoopState(OF_LOOP_NORMAL);
     
     }
@@ -435,27 +404,6 @@ void ofApp::LoadCurrentVideo(int timePeriod) {
 }
 
 
-//void ofApp::LoadCurrentSlideshows(int timePeriod) {
-//
-//    if (timePeriod == previousPeriod)
-//        return;
-//    
-//    
-//    if (timePeriod == 0) {
-//        slideshow.setup(ofToDataPath("slideshow/morning", true));
-//        
-//    }
-//    else if (timePeriod == 1) {
-//        slideshow.setup(ofToDataPath("slideshow/afternoon", true));
-//
-//    }
-//    else if (timePeriod == 2) {
-//        slideshow.setup(ofToDataPath("slideshow/night", true));
-//    }
-//}
-
-
-
 float t = 0;
 
 //--------------------------------------------------------------
@@ -468,15 +416,10 @@ void ofApp::update(){
 
             for (j; j < videoPlayers.size(); j++) {
                 videoPlayers[j]->update();
-                //videoPlayers[j]->play();
-                //t =  ofGetElapsedTimef() - initTime;
-                //if (t > 1.0)
-                    videoPlayers[j]->play();
+                videoPlayers[j]->play();
             }
         }
-        
         initTime = ofGetElapsedTimef();
-        
     }
     
     if (isSlideShow) {
@@ -494,12 +437,6 @@ void ofApp::update(){
     
     if (isHybrid) {
         
-    
-//        for (int j=0; j < videoPlayers.size(); j++) {
-//            videoPlayers[j]->update();
-//            videoPlayers[j]->stop();
-//        }
-        
         for (auto p: videoPlayers) {
             if(true || p->isLoaded()) {
                 p->update();
@@ -515,6 +452,15 @@ void ofApp::update(){
     fps = ofGetFrameRate();
 }
 
+void ofApp::clearVideoPlayer() {
+   
+    for (vector<ofxAVFVideoPlayer*>::iterator it = videoPlayers.begin(); it != videoPlayers.end(); ++it) {
+        delete *it;
+    }
+    
+    videoPlayers.clear();
+}
+
 //--------------------------------------------------------------
 void ofApp::draw(){
     
@@ -526,7 +472,7 @@ void ofApp::draw(){
         oscReceiver.getNextMessage(&m);
         
         // TOFIX: not use
-        if (m.getAddress() == "/sync/play/FW_SH_02_HBD_C/frameJump") {
+        if (m.getAddress() == "/sync/play/FW_SH_02_HBD_A/frameJump") {
             frameJump = m.getArgAsInt32(0);
             cout << "Frame sync, jump(" << frameJump << ") frames\r\n";
             
@@ -556,16 +502,13 @@ void ofApp::draw(){
             isHybridVideoLoaded = false;
             isHybrid = false;
 
-            
             timePeriod = m.getArgAsInt32(0);
             videoSeq = m.getArgAsInt32(1);
             cellKickTime = m.getArgAsInt32(2);
             
            
-            
             if (cellKickTime > previousCellKickTime)
                 isCellStart = true;
-
 
             i = videoSeq + 0;
             
@@ -575,16 +518,14 @@ void ofApp::draw(){
             //preload video
             LoadCurrentVideo(timePeriod);
             previousPeriod = timePeriod;
-
-
             
             cout << "[VIDEO SYNC INFO]" << ofGetTimestampString() << " time:" << timePeriod << ", seq#" << videoSeq << ", kick:" << cellKickTime << "\r\n";
         }
-        else if (m.getAddress() == "/sync/start/FW_SH_02_HBD_C/RUTHERE") {
+        else if (m.getAddress() == "/sync/start/FW_SH_02_HBD_A/RUTHERE") {
             // send ready
             cout << "Yes, I'm here..." << "\r\n";
             ofxOscMessage m;
-            m.setAddress("/sync/start/FW_SH_02_HBD_C");
+            m.setAddress("/sync/start/FW_SH_02_HBD_A");
             m.addStringArg("ready");
             //cout << "+++ A: OSC SEND: " << ofGetTimestampString() << "\r\n";
             oscSender.sendMessage(m);
@@ -624,38 +565,26 @@ void ofApp::draw(){
             cout << "[HYBRID SYNC INFO] " << ofGetTimestampString() << "time:" << timePeriod << ", seq#" << hybridshowSeq << "\r\n";
             hybridVideoNum = hybridshowSeq;
             
-            if (hybridshowSeq == prevHybridSeq && hybridPosterCount <2)
+            if (hybridshowSeq == prevHybridSeq && hybridPosterCount <4) // 5 posters in total
                 hybridPosterCount++;
             else {
                 hybridPosterCount = 0;
                 videoPlayers[hybridVideoNum]->setPosition(0.0);
             }
             
-            
-           
             canIStart = true;
             currentMode = THREE_HYBRID;
+           
             LoadCurrentVideo(ALL_DAY);
             previousPeriod = timePeriod; //TODO: this is potential issue
         }
         //dumpOSC(m);
     }
-    
-    
-    //////////////////////////////////////
-    //isSlideShow = true;
-    //slideshow.draw();
-    /////////////////////////////////////
-    
-
-//    char s[5];
-//    sprintf(s, "%3d", currentAppleAmount);
  
     strFruitString =  ofToString(currentAppleAmount) + strUnit;
     
     if (!canIStart)
         return;
-    
     
     if (!videoPause) {
         // update kicktime
@@ -691,28 +620,6 @@ void ofApp::draw(){
             videoFullscreenRect.scaleTo(screenRect, OF_ASPECT_RATIO_KEEP_BY_EXPANDING);
             videoPlayers[i]->draw(0, 0, videoFullscreenRect.getWidth(), videoFullscreenRect.getHeight());
 #endif
-#if 0
-            // for 2 1080 x 1920 videos
-            //---------------------------------------------------------- draw video texture to fullscreen.
-            
-            for (int videoNum = 0; videoNum < videoPlayers.size(); videoNum++) {
-                if (videoNum == 1) { //top
-                    ofRectangle screenRect(0, 0, ofGetWidth(), ofGetHeight()/2);
-                    ofRectangle videoRect(0, 0, videoPlayers[videoNum]->getWidth(), videoPlayers[videoNum]->getHeight());
-                    ofRectangle videoFullscreenRect = videoRect;
-                    videoFullscreenRect.scaleTo(screenRect, OF_ASPECT_RATIO_KEEP_BY_EXPANDING);
-                    videoPlayers[videoNum]->draw(0, 0, videoFullscreenRect.getWidth(), videoFullscreenRect.getHeight());
-                }
-                else if (videoNum == 0) { //bottom
-                    ofRectangle screenRect(0, 0, ofGetWidth(), ofGetHeight()/2);
-                    ofRectangle videoRect(0, 0, videoPlayers[videoNum]->getWidth(), videoPlayers[videoNum]->getHeight());
-                    ofRectangle videoFullscreenRect = videoRect;
-                    videoFullscreenRect.scaleTo(screenRect, OF_ASPECT_RATIO_KEEP_BY_EXPANDING);
-                    videoPlayers[videoNum]->draw(0, ofGetHeight()/2, videoFullscreenRect.getWidth(), videoFullscreenRect.getHeight());
-                }
-            }
-#endif
-
         
         // Static data for vegetable percentage
         ofPushMatrix();
@@ -897,7 +804,6 @@ void ofApp::draw(){
         ofPopMatrix();
         
         lastMode = THREE_HYBRID;
-
     }
 
     if (isDebugMode) {
@@ -1011,7 +917,6 @@ void ofApp::keyReleased(int key){
 
 //--------------------------------------------------------------
 void ofApp::mouseMoved(int x, int y ){
-    
 
 
 }

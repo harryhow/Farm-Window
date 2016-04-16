@@ -1,4 +1,12 @@
-# Farm-Window Alpha
+# Farm Window
+
+### ABOUT
+
+Farm window is a retail display system. It includes 
+
+
+### 
+
 
 ### OSC MESSAGE
 

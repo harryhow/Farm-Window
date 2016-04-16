@@ -3,8 +3,8 @@
 	<OFX_REMOTE_UI_PARAMS>
 		<P name="Vegetable Percentage" type="group"/>
 		<!-- # Vegetable Percentage ############################ -->
-		<P name="currentAppleAmount" type="int">68</P>
-		<P name="percentageX" type="int">432</P>
+		<P name="currentAppleAmount" type="int">94</P>
+		<P name="percentageX" type="int">448</P>
 		<P name="isShowPercentage" type="bool">1</P>
 		<P name="Maintenance Option" type="group"/>
 		<!-- # Maintenance Option ############################ -->
