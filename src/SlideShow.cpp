@@ -29,7 +29,8 @@ void SlideShow::setup(string photosFolder)
     {
         if (images.size()<maxNumFiles)
         {
-            ofFile filePath = files[ofRandom(files.size())].path();
+            //ofFile filePath = files[ofRandom(files.size())].path();
+            ofFile filePath = files[i].path();
             string path = filePath.getAbsolutePath();
             ofLogVerbose() << "file name: " << path;
             

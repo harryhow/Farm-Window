@@ -399,6 +399,13 @@ void ofApp::LoadCurrentVideo(int timePeriod) {
             videoPlayers[2]->loadMovie("movies/3.mov");
             videoPlayers[2]->setLoopState(OF_LOOP_NORMAL);
             isHybridVideoLoaded = true;
+            videoPlayers.push_back(new ofxAVFVideoPlayer());
+            videoPlayers[3]->loadMovie("movies/4.mov");
+            videoPlayers[3]->setLoopState(OF_LOOP_NORMAL);
+            
+            videoPlayers.push_back(new ofxAVFVideoPlayer());
+            videoPlayers[4]->loadMovie("movies/5.mov");
+            videoPlayers[4]->setLoopState(OF_LOOP_NORMAL);
         }
     }
 }
