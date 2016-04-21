@@ -37,9 +37,9 @@ int w = 0;
 int i = 0;
 int loopCounter = 0;
 static const int N_VIDEO_PLAYERS = 9;
-string ASSET_VIDEO_FOLDER = "movies/";
-string ASSET_IMAGE_FOLDER = "images/";
-string ASSET_HYBRID_IMAGE_FOLDER = "images/small/";
+string ASSET_VIDEO_FOLDER = "movies/"; // not used
+string ASSET_IMAGE_FOLDER = "images/modelA";
+string ASSET_HYBRID_IMAGE_FOLDER = "images/modelC/";
 
 int frameJump;
 
@@ -141,9 +141,9 @@ void ofApp::setup(){
     //ofSetDataPathRoot("./");
     
     
-    slideshow.setup(ofToDataPath("slideshow/morning", true));
-    slideshowAfternoon.setup(ofToDataPath("slideshow/afternoon", true));
-    slideshowNight.setup(ofToDataPath("slideshow/night", true));
+    slideshow.setup(ofToDataPath("images/modelB/slideshow/morning", true));
+    slideshowAfternoon.setup(ofToDataPath("images/modelB/slideshow/afternoon", true));
+    slideshowNight.setup(ofToDataPath("images/modelB/slideshow/night", true));
 
     PreloadAsset();
     
@@ -286,43 +286,17 @@ void ofApp::PreloadAsset() {
         imgTopHybridPosters.push_back(imgHybrid);
     }
     
-    if (timePeriod == 0) {
+    if (timePeriod == 0 || timePeriod == 1 || timePeriod == 2) {
         videoPlayers.push_back(new ofxAVFVideoPlayer);
-        videoPlayers[0]->loadMovie("movies/A_M_1.mov");
+        videoPlayers[0]->loadMovie("movies/modelA/1.mov");
         videoPlayers[0]->setLoopState(OF_LOOP_NORMAL);
         
         videoPlayers.push_back(new ofxAVFVideoPlayer());
-        videoPlayers[1]->loadMovie("movies/A_M_2.mov");
+        videoPlayers[1]->loadMovie("movies/modelA/2.mov");
         videoPlayers[1]->setLoopState(OF_LOOP_NORMAL);
         
         videoPlayers.push_back(new ofxAVFVideoPlayer());
-        videoPlayers[2]->loadMovie("movies/A_M_3.mov");
-        videoPlayers[2]->setLoopState(OF_LOOP_NORMAL);
-    }
-    else if (timePeriod == 1) {
-        videoPlayers.push_back(new ofxAVFVideoPlayer());
-        videoPlayers[0]->loadMovie("movies/A_A_1.mov");
-        videoPlayers[0]->setLoopState(OF_LOOP_NORMAL);
-        
-        videoPlayers.push_back(new ofxAVFVideoPlayer());
-        videoPlayers[1]->loadMovie("movies/A_A_2.mov");
-        videoPlayers[1]->setLoopState(OF_LOOP_NORMAL);
-        
-        videoPlayers.push_back(new ofxAVFVideoPlayer());
-        videoPlayers[2]->loadMovie("movies/A_A_3.mov");
-        videoPlayers[2]->setLoopState(OF_LOOP_NORMAL);
-    }
-    else if (timePeriod == 2) {
-        videoPlayers.push_back(new ofxAVFVideoPlayer());
-        videoPlayers[0]->loadMovie("movies/A_E_1.mov");
-        videoPlayers[0]->setLoopState(OF_LOOP_NORMAL);
-        
-        videoPlayers.push_back(new ofxAVFVideoPlayer());
-        videoPlayers[1]->loadMovie("movies/A_E_2.mov");
-        videoPlayers[1]->setLoopState(OF_LOOP_NORMAL);
-        
-        videoPlayers.push_back(new ofxAVFVideoPlayer());
-        videoPlayers[2]->loadMovie("movies/A_E_3.mov");
+        videoPlayers[2]->loadMovie("movies/modelA/3.mov");
         videoPlayers[2]->setLoopState(OF_LOOP_NORMAL);
     }
 }
@@ -340,71 +314,42 @@ void ofApp::LoadCurrentVideo(int timePeriod) {
 
     //clearVideoPlayer();
     
-    if (timePeriod == 0) {
+    // TODO: should i keep timePeriod 1, 2 still?
+    if (timePeriod == 0 || timePeriod == 1 || timePeriod == 2) {
         videoPlayers.push_back(new ofxAVFVideoPlayer());
-        videoPlayers[0]->loadMovie("movies/A_M_1.mov");
+        videoPlayers[0]->loadMovie("movies/modelA/morning/1.mov");
         videoPlayers[0]->setLoopState(OF_LOOP_NORMAL);
         
         videoPlayers.push_back(new ofxAVFVideoPlayer());
-        videoPlayers[1]->loadMovie("movies/A_M_2.mov");
+        videoPlayers[1]->loadMovie("movies/modelA/morning/2.mov");
         videoPlayers[1]->setLoopState(OF_LOOP_NORMAL);
         
         videoPlayers.push_back(new ofxAVFVideoPlayer());
-        videoPlayers[2]->loadMovie("movies/A_M_3.mov");
+        videoPlayers[2]->loadMovie("movies/modelA/morning/3.mov");
         videoPlayers[2]->setLoopState(OF_LOOP_NORMAL);
             
-    }
-    else if (timePeriod == 1) {
-
-        videoPlayers.push_back(new ofxAVFVideoPlayer());
-        videoPlayers[0]->loadMovie("movies/A_A_1.mov");
-        videoPlayers[0]->setLoopState(OF_LOOP_NORMAL);
-        
-        videoPlayers.push_back(new ofxAVFVideoPlayer());
-        videoPlayers[1]->loadMovie("movies/A_A_2.mov");
-        videoPlayers[1]->setLoopState(OF_LOOP_NORMAL);
-        
-        videoPlayers.push_back(new ofxAVFVideoPlayer());
-        videoPlayers[2]->loadMovie("movies/A_A_3.mov");
-        videoPlayers[2]->setLoopState(OF_LOOP_NORMAL);
-    
-    }
-    else if (timePeriod == 2) {
-        
-        videoPlayers.push_back(new ofxAVFVideoPlayer());
-        videoPlayers[0]->loadMovie("movies/A_E_1.mov");
-        videoPlayers[0]->setLoopState(OF_LOOP_NORMAL);
-        
-        videoPlayers.push_back(new ofxAVFVideoPlayer());
-        videoPlayers[1]->loadMovie("movies/A_E_2.mov");
-        videoPlayers[1]->setLoopState(OF_LOOP_NORMAL);
-        
-        videoPlayers.push_back(new ofxAVFVideoPlayer());
-        videoPlayers[2]->loadMovie("movies/A_E_3.mov");
-        videoPlayers[2]->setLoopState(OF_LOOP_NORMAL);
-    
     }
     else if (timePeriod == ALL_DAY) {
         
         if (!isHybridVideoLoaded) {
             videoPlayers.push_back(new ofxAVFVideoPlayer());
-            videoPlayers[0]->loadMovie("movies/1.mov");
+            videoPlayers[0]->loadMovie("movies/modelC/1.mov");
             videoPlayers[0]->setLoopState(OF_LOOP_NORMAL);
             
             videoPlayers.push_back(new ofxAVFVideoPlayer());
-            videoPlayers[1]->loadMovie("movies/2.mov");
+            videoPlayers[1]->loadMovie("movies/modelC/2.mov");
             videoPlayers[1]->setLoopState(OF_LOOP_NORMAL);
             
             videoPlayers.push_back(new ofxAVFVideoPlayer());
-            videoPlayers[2]->loadMovie("movies/3.mov");
+            videoPlayers[2]->loadMovie("movies/modelC/3.mov");
             videoPlayers[2]->setLoopState(OF_LOOP_NORMAL);
 
             videoPlayers.push_back(new ofxAVFVideoPlayer());
-            videoPlayers[3]->loadMovie("movies/4.mov");
+            videoPlayers[3]->loadMovie("movies/modelC/4.mov");
             videoPlayers[3]->setLoopState(OF_LOOP_NORMAL);
             
             videoPlayers.push_back(new ofxAVFVideoPlayer());
-            videoPlayers[4]->loadMovie("movies/5.mov");
+            videoPlayers[4]->loadMovie("movies/modelC/5.mov");
             videoPlayers[4]->setLoopState(OF_LOOP_NORMAL);
             
             isHybridVideoLoaded = true;

@@ -11,8 +11,8 @@
 
 //#define     HOST "10.1.3.255" // HG HBD's ip
 //#define       HOST "10.150.2.255" // HG HBD's LAN IP
-//#define     HOST "192.168.78.255" // BXB's broadcast ip
-#define     HOST "10.29.3.255" // BXB's broadcast ip
+//#define     HOST "192.168.43.255" // Wuding broadcast ip
+#define     HOST "10.29.3.255" // BXB's guest broadcast ip
 //#define     HOST "192.168.0.255"  // NY 251
 //#define     HOST "172.16.0.255"     // Houson Valley
 //#define     HOST "192.168.1.255" // queesn studio
